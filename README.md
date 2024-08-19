@@ -1,1 +1,1 @@
-This is the second iteration of my personal website, built with React and NextJs.
+This is the second iteration of my personal website, built with React and NextJs
