@@ -24,7 +24,7 @@ export default function Page(){
                 To achieve flexible and responsive designs, I employed Tailwind CSS for styling. Our website is integrated with Hygraph, a content management system, to facilitate seamless content updates for events, archives, and executive board information. 
                 This setup empowers other club executives to manage site content efficiently without the need to directly edit the source code. 
                 Data retrieval is streamlined through GraphQL queries to Hygraph."
-                ImageUrl="/images/Phil Club Full Logo.png"
+                ImageUrl="/static/images/phil-club-logo.png"
                 Link="https://uvaphilclub.github.io"
                 LinkText="Visit"
                 /> 
@@ -37,7 +37,7 @@ export default function Page(){
                 The site boasts responsive and visually appealing designs crafted with Tailwind CSS. 
                 To manage journal issues and executive information efficiently, we leverage Hygraph as our content repository. 
                 Data retrieval is seamlessly integrated via Hygraph's GraphQL interface, ensuring robust and streamlined operations."
-                ImageUrl="/images/Cont Cav Logo.png"
+                ImageUrl="/static/images/cont-cav-logo.png"
                 Link="https://the-contemplative-cavalier.vercel.app"
                 LinkText="Visit"
                 />
@@ -49,7 +49,7 @@ export default function Page(){
                 Our responsibilities include implementing new features and making necessary modifications to ensure the site remains current and functional.
                 The site serves as a comprehensive resource, providing essential club details such as practice schedules, meet information, and contact details. 
                 It plays a crucial role in outreach efforts to attract new members and engage with the community."
-                ImageUrl="/images/club_running.jpg"
+                ImageUrl="/static/images/club_running.jpg"
                 Link="https://virginia.clubrunning.org"
                 LinkText="Visit"
                 />
@@ -60,7 +60,7 @@ export default function Page(){
                 Description="The program utilizes youtube-dl to extract audio from any YouTube URL provided by the user, which is then played using FFmpeg. 
                 It features options to enable or disable the bot as needed, along with functionality to list all users and their selected music.
                 Currently deployed on my Discord server with over 100 members, the bot enhances user experience as a fun feature."
-                ImageUrl="/images/github.png"
+                ImageUrl="/static/images/github.png"
                 Link="https://github.com/grantbtzou/theme-song-bot"
                 LinkText="View on Github"
                 />
@@ -79,7 +79,7 @@ export default function Page(){
                 Skills={['SFM','Video Editing', 'Key Framing']}
                 Preview="Animated a short film using Valve's Source Film Maker software."
                 Description="I taught myself basic keyframing, lighting, and editing. The final video was exported as an image sequence and compiled in Blender."
-                ImageUrl="/images/SFM.png"
+                ImageUrl="/static/images/SFM.png"
                 Link="https://www.youtube.com/watch?v=K4jNCaaESw0"
                 LinkText="Watch"
                 /> 

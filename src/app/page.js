@@ -12,7 +12,7 @@ export default function Home() {
        <div className="flex justify-center items-center grow">
         <div className="flex flex-wrap justify-center items-start gap-x-4 mt-16 md:-mt-16">
           <div className="rounded-full overflow-hidden">
-            <Image src="/images/Grant.jpg" width={250}height={250}/>
+            <Image src="/static/images/Grant.jpg" width={250}height={250}/>
           </div>
           <div className="flex flex-wrap flex-col mx-8 md:mx-0 md:max-w-md lg:max-w-lg mb-[15vh] mt-4 md:mb-0">
             <h1 className="text-5xl font-bold">Grant Zou</h1>

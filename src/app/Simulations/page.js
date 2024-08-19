@@ -9,7 +9,7 @@ export default function Page(){
                 <div className="flex flex-wrap mx-auto mt-12 mb-24 justify-center md:justify-start max-w-5xl">
                     <div><Simulation
                     Path="Simulations/MontyHall" 
-                    ImageUrl="/images/goat.jpg" 
+                    ImageUrl="/static/images/goat.jpg" 
                     Title="Monty Hall Problem"
                     Description="A simulation of the famous Monty Hall Problem"/>
                     </div>
