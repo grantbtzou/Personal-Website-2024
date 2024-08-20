@@ -1,6 +1,11 @@
 import Image from "next/image"
 import Simulation from "@/app/components/simulation"
 
+export const metadata = {
+  title: "Grant Zou | Simulations",
+  description: "Probability simulations"
+}
+
 export default function Page(){
     return(
         <main>

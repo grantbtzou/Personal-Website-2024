@@ -1,6 +1,11 @@
 import MontyHall from "@/app/components/montyHall"
 import ManyDoorMontyHall from "@/app/components/manyDoorMontyHall"
 
+export const metadata = {
+  title: "Grant Zou | Monty Hall",
+  description: "A simulation of the Monty Hall problem"
+}
+
 export default function Page(){
     return(
     <main>

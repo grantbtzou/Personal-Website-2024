@@ -1,10 +1,14 @@
 import Image from "next/image";
-import { Roboto, Roboto_Serif } from "next/font/google";
 import { Roboto_Flex } from 'next/font/google';
 
 const robF = Roboto_Flex({ 
   subsets: ["latin"],
  });
+
+export const metadata = {
+  title: "Grant Zou",
+  description: "A personal website"
+}
 
 export default function Home() {
   return (

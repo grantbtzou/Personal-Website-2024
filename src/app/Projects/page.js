@@ -1,12 +1,14 @@
 "use client"
 import Project from "../components/project"
-import Image from "next/image"
-import { Oswald } from "next/font/google"
 import { Roboto_Condensed } from "next/font/google"
 
-const oswald = Oswald({ subsets: ["latin"] });
+
 const rob_condensed = Roboto_Condensed({ subsets: ["latin"] });
-const imageUrl = '../images/github.png';
+
+export const metadata = {
+  title: "Grant Zou | Projects",
+  description: "Projects I've worked on"
+}
 
 export default function Page(){
     return(
