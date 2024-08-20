@@ -1,4 +1,3 @@
-import Image from "next/image"
 import Simulation from "@/app/components/simulation"
 
 export const metadata = {
