@@ -5,16 +5,12 @@ import Head from "next/head";
 
 const rob_condensed = Roboto_Condensed({ subsets: ["latin"] });
 
-export const metadata = {
-  title: "Grant Zou | Projects",
-  description: "Projects I've worked on"
-}
-
 export default function Page(){
     return(
     <main>
         <Head>
           <title> Grant Zou | Projects</title>
+          <meta name="description" content="Some projects that I've worked on" />
         </Head>
         <div className="mb-[10vh]"> 
             <h1 className={rob_condensed.className + " font-light text-center text-7xl mt-20"}>Projects</h1>
