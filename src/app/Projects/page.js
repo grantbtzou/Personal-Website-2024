@@ -15,6 +15,19 @@ export default function Page(){
             <h1 className={rob_condensed.className + " font-light text-center text-7xl mt-20"}>Projects</h1>
             <div className="flex flex-wrap flex-col content-center">
                 <Project 
+                Title="Run 2 The Moon"
+                Skills={['React', 'Express', 'MongoDB', 'Leaflet']}
+                Preview="Created a web app for runners to map the mileage from their runs onto 
+                routes anywhere in the world"
+                Description="To provide motivation for runners, I developed an app so that they can map their mileage onto a route anywhere in the world
+                to see a visual representation of their progress. 
+                The project utilizes a MERN stack with MongoDB for data persistence, Express to handle data logic, React as the frontend framework, 
+                all on a Node environment. The app connects with Strava, a popular run logging app, through the Strava API,so that runs uploaded to Strava are automatically counted 
+                towards your progress. The maps are provided through the open source library Leaflet, and route calculation uses the MapBox directions API."
+                ImageUrl={'/static/images/moon.png'}
+                Link="https://run-2-the-moon.vercel.app"
+                LinkText="Visit"/> 
+                <Project 
                 Title="The Philosophy Club at UVA Website"
                 Skills={['React', 'Tailwind', 'GraphQL', 'Gatsby']}
                 Preview="Developed the website for The Philosophy Club at UVA using React and Gatsby. 
