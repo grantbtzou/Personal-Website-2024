@@ -23,9 +23,9 @@ export default function Home() {
             <p className="text-2xl font-bold">University of Virginia - 3rd Year</p>
             <p className="text-2xl font-bold">Computer Science and Statistics</p>
             <div className={robF.className}>
-            <p className="text-xl mt-2">I'm interested in understanding the world, why things work, and solving problems in a wide range of areas.</p>
-            <p className="text-xl mt-2">Aside from CS and Statistics, one of my primary interests is philosophy where I like to focus on argumentation, knowledge, and free will.
-              I am the webmaster for the Philsophy Club at UVA and The Contemplative Cavalier which can be viewed under my projects page. 
+            <p className="text-xl mt-2">I'm driven by a deep curiosity about how the world works and a passion for solving complex problems across various fields.</p>
+            <p className="text-xl mt-2">Beyond my interests in computer science and statistics, I am engaged with philosophy, particularly in the areas of argumentation, knowledge, and free will. 
+              I am the webmaster for the Philsophy Club at UVA and The Contemplative Cavalier which you can explore on my projects page. 
               I also love running and compete with UVA Club Running while contributing to the club website.</p>
             </div>
           </div>

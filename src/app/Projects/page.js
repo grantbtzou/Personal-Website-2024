@@ -21,8 +21,8 @@ export default function Page(){
                 routes anywhere in the world"
                 Description="To provide motivation for runners, I developed an app so that they can map their mileage onto a route anywhere in the world
                 to see a visual representation of their progress. 
-                The project utilizes a MERN stack with MongoDB for data persistence, Express to handle data logic, React as the frontend framework, 
-                all on a Node environment. The app connects with Strava, a popular run logging app, through the Strava API,so that runs uploaded to Strava are automatically counted 
+                The project utilizes a MERN stack with MongoDB for data persistence, ExpressJS to handle data logic, React and NextJS as the frontend framework, 
+                all on a NodeJS environment. The app connects with Strava, a popular run logging app, through the Strava API, so that runs uploaded to Strava are automatically counted 
                 towards your progress. The maps are provided through the open source library Leaflet, and route calculation uses the MapBox directions API."
                 ImageUrl={'/static/images/moon.png'}
                 Link="https://run-2-the-moon.vercel.app"
@@ -35,7 +35,7 @@ export default function Page(){
                 Description="As the first webmaster for the Philosophy Club at UVA, I developed the club site from the ground up using React and Gatsby as a framework. 
                 The site contains club information, semester schedules, and contact information.
                 To achieve flexible and responsive designs, I employed Tailwind CSS for styling. Our website is integrated with Hygraph, a content management system, to facilitate seamless content updates for events, archives, and executive board information. 
-                This setup empowers other club executives to manage site content efficiently without the need to directly edit the source code. 
+                This setup enables other club executives to manage site content efficiently without the need to directly edit the source code. 
                 Data retrieval is streamlined through GraphQL queries to Hygraph."
                 ImageUrl="/static/images/phil-club-logo.png"
                 Link="https://uvaphilclub.github.io"
