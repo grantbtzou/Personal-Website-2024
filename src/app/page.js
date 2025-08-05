@@ -21,7 +21,7 @@ export default function Home() {
             </div>
             <div className="flex flex-wrap flex-col mx-8 md:mx-0 md:max-w-md lg:max-w-lg mt-4 md:mb-0 text-center sm:text-left relative sm:bottom-4">
               <h1 className="text-5xl font-bold">Grant Zou</h1>
-              <p className="text-2xl font-bold">University of Virginia - 3rd Year</p>
+              <p className="text-2xl font-bold">University of Virginia - 4th Year</p>
               <p className="text-2xl font-bold">Computer Science and Statistics</p>
             </div>
           </div>

@@ -27,6 +27,20 @@ export default function Page(){
                 ImageUrl={'/static/images/moon.png'}
                 Link="https://run-2-the-moon.vercel.app"
                 LinkText="Visit"/> 
+                 <Project 
+                Title="Multi-language Development Security Trends"
+                Skills={['Python', 'Security']}
+                Preview="Research assistant at the George Mason University Sun Security Lab working on projects investigating patterns 
+                in multi-(coding)language software."
+                Description="Published work on the trends in security patches of open-source software, focused on identifying key patterns
+                and vulnerabilities with the goal of understanding the trends and vulnerabilities present in these 
+                programs in order to prevent security weaknesses. Using Python, I retrieved GitHub commits from diverse repositories spanning languages such as C, C++, Rust, Python, Java, JavaScript, HTML, and CSS. 
+                I analyzed these commits to uncover commonalities, employing both automated Python scripts for data extraction and spreadsheet creation, as well as manual examination leveraging my background in these languages. 
+                "
+                ImageUrl="/static/images/mason.jpg"
+                Link="https://doi.org/10.1007/978-3-031-97623-0_8"
+                LinkText="Read Here"
+                /> 
                 <Project 
                 Title="The Philosophy Club at UVA Website"
                 Skills={['React', 'Tailwind', 'GraphQL', 'Gatsby']}
@@ -77,16 +91,6 @@ export default function Page(){
                 Link="https://github.com/grantbtzou/theme-song-bot"
                 LinkText="View on Github"
                 />
-                <Project 
-                Title="Multi-language Development Security Trends"
-                Skills={['Python', 'Security']}
-                Preview="Research assistant at the George Mason University Sun Security Lab working on projects investigating patterns 
-                in multi-(coding)language software."
-                Description="Our goal is to understand the trends and vulnerabilities present in these 
-                programs in order to prevent security weaknesses. Using Python, I retrieve GitHub commits from diverse repositories spanning languages such as C, C++, Rust, Python, Java, JavaScript, HTML, and CSS. 
-                I analyze these commits to uncover commonalities, employing both automated Python scripts for data extraction and spreadsheet creation, as well as manual examination leveraging my background in these languages. 
-                Our primary focus is on the Django web framework, and we anticipate publishing our findings soon."
-                /> 
                 <Project 
                 Title="Source Film Maker Animation"
                 Skills={['SFM','Video Editing', 'Key Framing']}
