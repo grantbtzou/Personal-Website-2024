@@ -1,10 +1,8 @@
 import { Handle, Position } from '@xyflow/react';
-function GameNode({ data ={} }) {
+function BaseNode( { data = {} }) {
  
   return (
-    <div className={`h-16 w-16 border-2 rounded-full 
-       ${data.selected ? 'bg-blue-500 text-white' : 'bg-white text-black'}
-      `}>
+    <div className="h-16 w-16 border-2 rounded-full">
        <Handle
         type="target"
         position={Position.Top}
@@ -20,4 +18,4 @@ function GameNode({ data ={} }) {
   );
 }
 
-export default GameNode;
+export default BaseNode;
