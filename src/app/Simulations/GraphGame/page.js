@@ -3,23 +3,24 @@ import { useState, useCallback } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import GameNode from '@/app/components/GraphGame/gameNode';
+import BaseNode from '@/app/components/GraphGame/baseNode';
 
 const initialNodes = [
-  { id: 'n1', type: 'gameNode', position: { x: -200, y: 0 } },
-  { id: 'n2', type: 'gameNode', position: { x: -200, y: 100 }},
-  { id: 'n3', type: 'gameNode', position: { x: -200, y: 200 }},
-  { id: 'n4', type: 'gameNode', position: { x: -200, y: 300 }},
-  { id: 'n5', type: 'gameNode', position: { x: -200, y: 400 }},
-  { id: 'n6', type: 'gameNode', position: { x: 0, y: 0 }},
-  { id: 'n7', type: 'gameNode', position: { x: 0, y: 100 }},
-  { id: 'n8', type: 'gameNode', position: { x: 0, y: 200 }},
-  { id: 'n9', type: 'gameNode', position: { x: 0, y: 300 }},
-  { id: 'n10', type: 'gameNode', position: { x: 0, y: 400 }},
-  { id: 'n11', type: 'gameNode', position: { x: 200, y: 0 }},
-  { id: 'n12', type: 'gameNode', position: { x: 200, y: 100 }},
-  { id: 'n13', type: 'gameNode', position: { x: 200, y: 200 }},
-  { id: 'n14', type: 'gameNode', position: { x: 200, y: 300 }},
-  { id: 'n15', type: 'gameNode', position: { x: 200, y: 400 }},
+  { id: 'n1', type: 'baseNode', position: { x: -200, y: 0 }, data: {player: 'player1'}},
+  { id: 'n2', type: 'gameNode', position: { x: -200, y: 100 }, data: {player: null} },
+  { id: 'n3', type: 'gameNode', position: { x: -200, y: 200 }, data: {player: null} },
+  { id: 'n4', type: 'gameNode', position: { x: -200, y: 300 }, data: {player: null}},
+  { id: 'n5', type: 'baseNode', position: { x: -200, y: 400 }, data: {player: 'player2'}},
+  { id: 'n6', type: 'baseNode', position: { x: 0, y: 0 }, data: {player: 'player1'}},
+  { id: 'n7', type: 'gameNode', position: { x: 0, y: 100 }, data: {player: null}},
+  { id: 'n8', type: 'gameNode', position: { x: 0, y: 200 }, data: {player: null}},
+  { id: 'n9', type: 'gameNode', position: { x: 0, y: 300 }, data: {player: null}},
+  { id: 'n10', type: 'baseNode', position: { x: 0, y: 400 }, data: {player: 'player2'}},
+  { id: 'n11', type: 'baseNode', position: { x: 200, y: 0 }, data: {player: 'player1'}},
+  { id: 'n12', type: 'gameNode', position: { x: 200, y: 100 }, data: {player: null}},
+  { id: 'n13', type: 'gameNode', position: { x: 200, y: 200 }, data: {player: null}},
+  { id: 'n14', type: 'gameNode', position: { x: 200, y: 300 }, data: {player: null}},
+  { id: 'n15', type: 'baseNode', position: { x: 200, y: 400 }, data: {player: 'player2'}},
 
 ];
 const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2',}, 
@@ -36,17 +37,17 @@ const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2',},
                       { id: 'n14-n15', source: 'n14', target: 'n15'},
 ];
 const nodeTypes = {
-  gameNode: GameNode
+  gameNode: GameNode,
+  baseNode: BaseNode
 }
 export default function Page(){
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [player1Attack, setplayer1Attack] = useState(null)
   const [player1Defend, setplayer1Defend] = useState(null) 
-  const [player1Selection, setplayer1Selection] = useState(true)
+  const [playerSelection, setplayerSelection] = useState('attack')
   const [player2Attack, setplayer2Attack] = useState(null) 
   const [player2Defend, setplayer2Defend] = useState(null)
-  const [player2Selection, setplayer2Selection] = useState(false)
   const [activePlayer, setActivePlayer] = useState('player1')
 
   const onNodesChange = useCallback(
@@ -63,22 +64,75 @@ export default function Page(){
   );
   
   const onNodeClick = useCallback((_, clickedNode) => {
-    setNodes((nds) =>
-      nds.map((node) =>
-        node.id === clickedNode.id
-          ? {
-              ...node,
-              data: {
-                ...node.data,
-                selected: !node.data?.selected,
-              },
-            }
-          : node
-      )
-    );
+    if(playerSelection === 'attack'){
+      setAttack(clickedNode)
+    }
+    if(playerSelection === 'defend'){
+      setDefend(clickedNode)
+    }
   }, []);
 
+  function setAttack(clickedNode){
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === clickedNode.id && hasConnectedNodeWith(node.id, nodes, edges, (n) => n.data?.player === activePlayer)) {
+          if(activePlayer === 'player1'){
+            setplayer1Attack(node.id)
+          } 
+          if(activePlayer === 'player2'){
+            setplayer2Attack(node.id)
+          }
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              attackSelection: !node.data?.attackSelection,
+            },
+          };
+        } else {
+          return node;
+        }
+      })
+    );
+  }
 
+  function setDefend(clickedNode){
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === clickedNode.id && hasConnectedNodeWith(node.id, nodes, edges, (n) => n.data?.player === activePlayer)) {
+          if(activePlayer === 'player1'){
+            setplayer1Defend(node.id)
+          } 
+          if(activePlayer === 'player2'){
+            setplayer2Defend(node.id)
+          }
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              defendSelection: !node.data?.defendSelection,
+            },
+          };
+        } else {
+          return node;
+        }
+      })
+    );
+  }
+
+  function getConnectedNodes(nodeId, nodes, edges) {
+    const connectedIds = edges.flatMap((edge) => {
+      if (edge.source === nodeId) return [edge.target];
+      if (edge.target === nodeId) return [edge.source];
+      return [];
+    });
+    return nodes.filter((node) => connectedIds.includes(node.id));
+  }
+
+  function hasConnectedNodeWith(nodeId, nodes, edges, predicate) {
+    const connectedNodes = getConnectedNodes(nodeId, nodes, edges);
+    return connectedNodes.some(predicate);
+  }
 
 
   return(<main>
