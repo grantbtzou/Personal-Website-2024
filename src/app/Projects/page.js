@@ -65,7 +65,7 @@ export default function Page(){
                 To manage journal issues and executive information efficiently, we leverage Hygraph as our content repository. 
                 Data retrieval is seamlessly integrated via Hygraph's GraphQL interface, ensuring robust and streamlined operations."
                 ImageUrl="/static/images/cont-cav-logo.png"
-                Link="https://the-contemplative-cavalier.vercel.app"
+                Link="https://thecontemplativecavalier.org/"
                 LinkText="Visit"
                 />
                 <Project 

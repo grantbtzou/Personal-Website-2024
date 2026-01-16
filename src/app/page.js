@@ -28,9 +28,10 @@ export default function Home() {
           <div className={`max-w-3xl mx-8 mt-28 sm:mt-4 mb-6 `}>
             <h2 className="text-4xl font-bold">About</h2>
             <div className={`${robF.className}`}>
-            <p className="text-md mt-1">I'm driven by a deep curiosity about how the world works and a passion for solving complex problems across various fields.</p>
-            <p className="text-md mt-2">Beyond my interests in computer science and statistics, I am engaged with philosophy, particularly in the areas of argumentation, knowledge, and free will. 
-                I am the webmaster for the Philsophy Club at UVA and The Contemplative Cavalier which you can explore on my projects page. 
+            <p className="text-md mt-1"></p>
+            <p className="text-md mt-1">I'm driven by a deep curiosity toward understanding how the world works and why, which I apply to every problem I face.</p>
+            <p className="text-md mt-2">Beyond my interests in computer science and statistics, I am engaged with philosophy, particularly in the areas of logic, knowledge, and free will. 
+                I am the webmaster for the Philsophy Club at UVA which you can explore on my projects page. 
                 I also love running and compete with UVA Club Running while contributing to the club website.</p>
             </div>
           </div>
