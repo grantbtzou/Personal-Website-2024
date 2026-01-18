@@ -78,52 +78,101 @@ export default function Page(){
   const onNodeClick = useCallback((_, clickedNode) => {
     console.log(playerSelection)
     if(playerSelection === 'attack'){
-      setAction(clickedNode, 'attack')
+      setAttack(clickedNode)
+      for(const node of nodes){
+      console.log(`${node.id}: ${node.data.interactions['player1'].intent}`)
+    }
     }
     if(playerSelection === 'defend'){
-      setAction(clickedNode, 'defend')
+      setDefend(clickedNode)
     }
-  }, [playerSelection]);
+  }, [nodes,playerSelection]);
 
-  function setAction(clickedNode, action){
-    setNodes((nds) =>
-      nds.map((node) => {
-        // Set the selected node to be selected for the action
-        if (node.id === clickedNode.id && hasConnectedNodeWith(node.id, nodes, edges, (n) => n.data?.owner === activePlayer)) {
-          if (activePlayer === 'player1'){
-            setplayer1Attack(node)
-          } 
-          if (activePlayer === 'player2'){
-            setplayer2Attack(node)
+  function setAttack(clickedNode){
+    if((!hasConnectedNodeWith(clickedNode.id, nodes, edges, (n) => n.data?.owner === activePlayer)
+      || clickedNode.data.owner !== null)){
+      return
+    }
+    setNodes((nds) => {
+    // PASS 1 — clear previous selection
+    const cleared = nds.map((node) => {
+      const intent = node.data.interactions?.[activePlayer]?.intent;
+
+      if (intent === 'attack') {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            interactions: {
+              ...node.data.interactions,
+              [activePlayer]: { intent: null },
+            },
+          },
+        };
+      }
+
+      return node;
+    });
+
+    // PASS 2 — apply new selection
+    const updated = cleared.map((node) =>
+      node.id === clickedNode.id
+        ? {
+            ...node,
+            data: {
+              ...node.data,
+              interactions: {
+                ...node.data.interactions,
+                [activePlayer]: { intent: 'attack' },
+              },
+            },
           }
+        : node
+    );
+
+    return updated;
+    });
+  }
+  function setDefend(clickedNode){
+    if(!(hasConnectedNodeWith(clickedNode.id, nodes, edges, (n) => n.data?.owner !== activePlayer) 
+        && clickedNode.data.owner === activePlayer)){
+          return 
+        }
+    setNodes((nds) => {
+      // PASS 1 — clear previous selection
+      const cleared = nds.map((node) => {
+        const intent = node.data.interactions?.[activePlayer]?.intent;
+
+        if (intent === 'defend') {
           return {
             ...node,
             data: {
               ...node.data,
               interactions: {
                 ...node.data.interactions,
-                [activePlayer]: { intent: action },
-              }
+                [activePlayer]: { intent: null },
+              },
             },
           };
-        } 
-        // Remove the selected intent from all other nodes selected
-        else if(node.data.interactions[activePlayer].intent === action){
-          return {
-            ...node, 
-            data: { 
-              ...node.data, 
-              interactions: {
-                ...node.data.interactions,
-                [activePlayer]: { intent: null },
-              }
-            }
-          }
-        } else{
-          return node 
         }
-      })
-    );
+        return node;
+      });
+      const updated = cleared.map((node) =>
+        node.id === clickedNode.id
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                interactions: {
+                  ...node.data.interactions,
+                  [activePlayer]: { intent: 'defend' },
+                },
+              },
+            }
+          : node
+      );
+      return updated;
+    })
   }
 
   function selectConfirm(){

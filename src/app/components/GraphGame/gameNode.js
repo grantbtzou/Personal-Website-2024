@@ -6,8 +6,7 @@ function GameNode({ data = {} }) {
 const { activePlayer } = useContext(GameContext);
 const intent = data.interactions?.[activePlayer]?.intent;
   return (
-    <div
-      className={`h-16 w-16 rounded-full border-2 ${
+    <div className={`h-16 w-16 rounded-full border-2 ${
         intent === 'attack'
           ? 'bg-green-500 text-white'
           : intent === 'defend'
