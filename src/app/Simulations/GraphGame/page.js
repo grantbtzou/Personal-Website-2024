@@ -133,6 +133,7 @@ export default function Page(){
     return updated;
     });
   }
+
   function setDefend(clickedNode){
     if(!(hasConnectedNodeWith(clickedNode.id, nodes, edges, (n) => n.data?.owner !== activePlayer) 
         && clickedNode.data.owner === activePlayer)){
@@ -186,73 +187,85 @@ export default function Page(){
   }
 
   function resolve(){
-    setNodes((nds) =>
-      nds.map((node) => {
-        const interactions = node.data.interactions ?? {} // Get the interactions
-        const entries = Object.entries(interactions) // Extract into array 
-        const intents = entries.map(([, v]) => v.intent); // Extract just intents
-        // Nothing happens when both attack
-        if(intents.length === 2 && intents.every(intent => intent === 'attack')){
-          return{
-            ...node,
-             data: {
-              ...node.data,
-              interactions: {
-                ...node.data.interactions,
-                ['player1']: { intent: null },
-                ['player2']: { intent: null },
-              }
-            },
-          }
-        // Need to handle reversal on defend
-        } else if(intents.length === 2 && intents.includes('attack') && intents.includes('defend')){
+    setNodes((nds) => {
+      const outcomes = new Map();
+
+      for (const node of nds) {
+        const interactions = node.data.interactions ?? {};
+        const entries = Object.entries(interactions);
+        const intents = entries.map(([, v]) => v.intent);
+
+        if (intents.length !== 2) continue;
+
+        // Case 1: both attack → nothing happens
+        if (intents.every(i => i === 'attack')) {
+          outcomes.set(node.id, { type: 'none' });
+        }
+        else if (intents.includes('attack') && intents.includes('defend')) {
           const attacker = entries.find(([, v]) => v.intent === 'attack')[0];
           const defender = entries.find(([, v]) => v.intent === 'defend')[0];
-          return{
-            ...node,
-             data: {
-              ...node.data,
-              interactions: {
-                ...node.data.interactions,
-                ['player1']: { intent: null },
-                ['player2']: { intent: null },
-              }
-            },
-          }
-        // If one attack, capture the node 
-        } else if(intents.length === 2 && intents.includes('attack') && intents.includes(null)){
-          const attacker = entries.find(([, v]) => v.intent === 'attack')[0];
-          return{
-            ...node,
-            data: {
-              ...node.data,
-              owner: attacker,
-              interactions: {
-                ...node.data.interactions,
-                ['player1']: { intent: null },
-                ['player2']: { intent: null },
-              }
-            },
-            
-          }
-        }
-        // All other nodes get their intents deselected
-        else{
-          return {
-            ...node,
-             data: {
-              ...node.data,
-              interactions: {
-                ...node.data.interactions,
-                ['player1']: { intent: null },
-                ['player2']: { intent: null },
-              }
-            },
-          }
-        }
-      }))
-  }
 
+          outcomes.set(node.id, {
+            type: 'attack-defend',
+            attacker,
+            defender,
+          });
+        }
+        // Case 3: single attack (capture)
+        else if (intents.includes('attack') && intents.includes(null)) {
+          const attacker = entries.find(([, v]) => v.intent === 'attack')[0];
+
+          outcomes.set(node.id, {
+            type: 'capture',
+            attacker,
+          });
+        }
+      }
+      let updated = nds.map((node) => {
+      const outcome = outcomes.get(node.id);
+
+      if (!outcome) return node;
+
+      // Capture
+      if (outcome.type === 'capture') {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            owner: outcome.attacker,
+          },
+        };
+      }
+
+      // Attack + Defend (reversal logic placeholder)
+      if (outcome.type === 'attack-defend') {
+        // Example: no ownership change yet
+        return node;
+      }
+
+      // Both attack → no change
+      return node;
+    });
+    updated = updated.map((node) => ({
+    ...node,
+    data: {
+      ...node.data,
+      interactions: clearIntents(node.data.interactions),
+    },
+    }));
+
+    return updated;
+    })
+  };
+
+
+  function clearIntents(interactions) {
+    return {
+      ...interactions,
+      player1: { intent: null },
+      player2: { intent: null },
+    };
+  }
   function getConnectedNodes(nodeId, nodes, edges) {
     const connectedIds = edges.flatMap((edge) => {
       if (edge.source === nodeId) return [edge.target];
