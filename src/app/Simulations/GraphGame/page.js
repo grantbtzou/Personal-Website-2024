@@ -1,5 +1,5 @@
 'use client'
-import { useState, useCallback, createContext } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import GameNode from '@/app/components/GraphGame/gameNode';
@@ -29,23 +29,27 @@ const createBaseNode = (id, type, position, player) => ({
   }
 })
 
-const initialNodes = [
-  createBaseNode('n1', 'baseNode', { x: -200, y: 0 }, 'player1'),
-  createGameNode('n2', 'gameNode', { x: -200, y: 100 }),
-  createGameNode('n3', 'gameNode', { x: -200, y: 200 }),
-  createGameNode('n4', 'gameNode', { x: -200, y: 300 }),
-  createBaseNode('n5', 'baseNode', { x: -200, y: 400 }, 'player2'),
-  createBaseNode('n6', 'baseNode', { x: -0, y: 0 }, 'player1'),
-  createGameNode('n7', 'gameNode', { x: -0, y: 100 }),
-  createGameNode('n8', 'gameNode', { x: -0, y: 200 }),
-  createGameNode('n9', 'gameNode', { x: -0, y: 300 }),
-  createBaseNode('n10', 'baseNode', { x: -0, y: 400 }, 'player2'),
-  createBaseNode('n11', 'baseNode', { x: 200, y: 0 }, 'player1'),
-  createGameNode('n12', 'gameNode', { x: 200, y: 100 }),
-  createGameNode('n13', 'gameNode', { x: 200, y: 200 }),
-  createGameNode('n14', 'gameNode', { x: 200, y: 300 }),
-  createBaseNode('n15', 'baseNode', { x: 200, y: 400 }, 'player2'),
-];
+function createInitialNodes() {
+  return [
+    createBaseNode('n1', 'baseNode', { x: -200, y: 0 }, 'player1'),
+    createGameNode('n2', 'gameNode', { x: -200, y: 100 }),
+    createGameNode('n3', 'gameNode', { x: -200, y: 200 }),
+    createGameNode('n4', 'gameNode', { x: -200, y: 300 }),
+    createBaseNode('n5', 'baseNode', { x: -200, y: 400 }, 'player2'),
+
+    createBaseNode('n6', 'baseNode', { x: 0, y: 0 }, 'player1'),
+    createGameNode('n7', 'gameNode', { x: 0, y: 100 }),
+    createGameNode('n8', 'gameNode', { x: 0, y: 200 }),
+    createGameNode('n9', 'gameNode', { x: 0, y: 300 }),
+    createBaseNode('n10', 'baseNode', { x: 0, y: 400 }, 'player2'),
+
+    createBaseNode('n11', 'baseNode', { x: 200, y: 0 }, 'player1'),
+    createGameNode('n12', 'gameNode', { x: 200, y: 100 }),
+    createGameNode('n13', 'gameNode', { x: 200, y: 200 }),
+    createGameNode('n14', 'gameNode', { x: 200, y: 300 }),
+    createBaseNode('n15', 'baseNode', { x: 200, y: 400 }, 'player2'),
+  ];
+}
 const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2',}, 
                       { id: 'n2-n3', source: 'n2', target: 'n3'}, 
                       { id: 'n3-n4', source: 'n3', target: 'n4'}, 
@@ -66,7 +70,7 @@ const nodeTypes = {
 }
 
 export default function Page(){
-  const [nodes, setNodes] = useState(initialNodes);
+  const [nodes, setNodes] = useState(createInitialNodes);
   const [edges, setEdges] = useState(initialEdges);
   const [player1Attack, setplayer1Attack] = useState(null);
   const [player1Defend, setplayer1Defend] = useState(null);
@@ -282,29 +286,33 @@ export default function Page(){
       interactions: clearIntents(node.data.interactions),
     },
     }));
-
-
     return updated;
     })
-    // Check if the game is over 
-    const baseNodes = nodes.filter(
-      (node) => node.type === 'baseNode'
-    );
-    const contestedBases = baseNodes.filter(
-      (node) => node.data.owner !== node.data.baseOwner
-    );
-    if(contestedBases.length === 0){
-      return;
-    }
-    else if(contestedBases.length === 1){
-      setWinner(contestedBases[0].data.owner);
-      setGameActive(false);
-    } else if(contestedBases.length === 2){
-      setWinner("Draw");
-      setGameActive(false);
-    }
+    
   };
 
+  useEffect(() => {
+  // Only check when the game is active
+  if (!gameActive) return;
+
+  const baseNodes = nodes.filter(
+    (node) => node.type === 'baseNode'
+  );
+
+  const contestedBases = baseNodes.filter(
+    (node) => node.data.owner !== node.data.baseOwner
+  );
+
+  if (contestedBases.length === 0) return;
+
+  if (contestedBases.length === 1) {
+    setWinner(contestedBases[0].data.owner);
+    setGameActive(false);
+  } else if (contestedBases.length === 2) {
+    setWinner('draw');
+    setGameActive(false);
+  }
+}, [nodes, gameActive]);
 
   function clearIntents(interactions) {
     return {
@@ -335,7 +343,11 @@ export default function Page(){
   }
 
   function resetGame(){
-    
+    setNodes(createInitialNodes());
+    setplayerSelection('attack');
+    setActivePlayer('player1');
+    setWinner(null);
+    setGameActive(true);
   }
 
   return(<main>
@@ -365,11 +377,11 @@ export default function Page(){
             <div className={`border p-4 ${activePlayer === 'player1' ? 'bg-orange-300' : 'bg-white'}`}>
               <div>Player 1</div> 
               <div className="border p-4">
-                <button className={`border p-4 ${playerSelection === 'attack' ? 'bg-blue-600' : 'bg-white'}`} 
+                <button className={`border p-4 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
                 onClick={() => {setplayerSelection("attack"); }}>
                   Attack
                 </button>
-                <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-blue-600' : 'bg-white'}`}
+                <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
                 onClick={() => {setplayerSelection("defend"); }}>
                   Defend
                 </button>
@@ -382,9 +394,9 @@ export default function Page(){
             <div className={`border p-4 ${activePlayer === 'player2' ? 'bg-orange-300' : 'bg-white'}`}>
               <div>Player 2 </div>
               <div className="border p-4">
-                <button className={`border p-4  ${playerSelection === 'attack' ? 'bg-blue-600' : 'bg-white'}`}
+                <button className={`border p-4  ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`}
                 onClick={() => setplayerSelection("attack")}>Attack</button>
-                <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-blue-600' : 'bg-white'}`}
+                <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
                 onClick={() => setplayerSelection("defend")}>Defend</button>
               </div>
               <button className="border p-4"
@@ -393,9 +405,13 @@ export default function Page(){
               </button>
             </div>
             <div>
-              {!gameActive && <div>
-              <p>{winner} wins!</p>
-              <button onClick={() => resetGame()}></button></div>}
+              {!gameActive && winner === 'draw' && <div>
+              <p>Draw</p>
+              <button onClick={() => resetGame()}>New game</button></div>}
+              {!gameActive && winner !== 'draw' && <div>
+              <p>{winner} wins</p>
+              <button onClick={() => resetGame()}>New game</button></div>
+              }
             </div>
           </div>
         </div>
