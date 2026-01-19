@@ -6,10 +6,22 @@ import GameNode from '@/app/components/GraphGame/gameNode';
 import BaseNode from '@/app/components/GraphGame/baseNode';
 import { GameContext } from '@/app/components/GraphGame/gameContext';
 
-const createNode = (id, type, position, player) => ({
+const createGameNode = (id, type, position) => ({
   id: id, type: type, position: position,
   data: {
-    owner: player,  
+    owner: null,  
+    interactions: {
+      player1: { intent: null },  
+      player2: { intent: null },
+  },
+  }
+})
+
+const createBaseNode = (id, type, position, player) => ({
+  id: id, type: type, position: position,
+  data: {
+    owner: player, 
+    baseOwner: player, 
     interactions: {
       player1: { intent: null },  
       player2: { intent: null },
@@ -18,21 +30,21 @@ const createNode = (id, type, position, player) => ({
 })
 
 const initialNodes = [
-  createNode('n1', 'baseNode', { x: -200, y: 0 }, 'player1'),
-  createNode('n2', 'gameNode', { x: -200, y: 100 }, null),
-  createNode('n3', 'gameNode', { x: -200, y: 200 }, null),
-  createNode('n4', 'gameNode', { x: -200, y: 300 }, null),
-  createNode('n5', 'baseNode', { x: -200, y: 400 }, 'player2'),
-  createNode('n6', 'baseNode', { x: -0, y: 0 }, 'player1'),
-  createNode('n7', 'gameNode', { x: -0, y: 100 }, null),
-  createNode('n8', 'gameNode', { x: -0, y: 200 }, null),
-  createNode('n9', 'gameNode', { x: -0, y: 300 }, null),
-  createNode('n10', 'baseNode', { x: -0, y: 400 }, 'player2'),
-  createNode('n11', 'baseNode', { x: 200, y: 0 }, 'player1'),
-  createNode('n12', 'gameNode', { x: 200, y: 100 }, null),
-  createNode('n13', 'gameNode', { x: 200, y: 200 }, null),
-  createNode('n14', 'gameNode', { x: 200, y: 300 }, null),
-  createNode('n15', 'baseNode', { x: 200, y: 400 }, 'player2'),
+  createBaseNode('n1', 'baseNode', { x: -200, y: 0 }, 'player1'),
+  createGameNode('n2', 'gameNode', { x: -200, y: 100 }),
+  createGameNode('n3', 'gameNode', { x: -200, y: 200 }),
+  createGameNode('n4', 'gameNode', { x: -200, y: 300 }),
+  createBaseNode('n5', 'baseNode', { x: -200, y: 400 }, 'player2'),
+  createBaseNode('n6', 'baseNode', { x: -0, y: 0 }, 'player1'),
+  createGameNode('n7', 'gameNode', { x: -0, y: 100 }),
+  createGameNode('n8', 'gameNode', { x: -0, y: 200 }),
+  createGameNode('n9', 'gameNode', { x: -0, y: 300 }),
+  createBaseNode('n10', 'baseNode', { x: -0, y: 400 }, 'player2'),
+  createBaseNode('n11', 'baseNode', { x: 200, y: 0 }, 'player1'),
+  createGameNode('n12', 'gameNode', { x: 200, y: 100 }),
+  createGameNode('n13', 'gameNode', { x: 200, y: 200 }),
+  createGameNode('n14', 'gameNode', { x: 200, y: 300 }),
+  createBaseNode('n15', 'baseNode', { x: 200, y: 400 }, 'player2'),
 ];
 const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2',}, 
                       { id: 'n2-n3', source: 'n2', target: 'n3'}, 
@@ -56,12 +68,14 @@ const nodeTypes = {
 export default function Page(){
   const [nodes, setNodes] = useState(initialNodes);
   const [edges, setEdges] = useState(initialEdges);
-  const [player1Attack, setplayer1Attack] = useState(null)
-  const [player1Defend, setplayer1Defend] = useState(null) 
-  const [playerSelection, setplayerSelection] = useState('attack')
-  const [player2Attack, setplayer2Attack] = useState(null) 
-  const [player2Defend, setplayer2Defend] = useState(null)
-  const [activePlayer, setActivePlayer] = useState('player1')
+  const [player1Attack, setplayer1Attack] = useState(null);
+  const [player1Defend, setplayer1Defend] = useState(null);
+  const [playerSelection, setplayerSelection] = useState('attack');
+  const [player2Attack, setplayer2Attack] = useState(null);
+  const [player2Defend, setplayer2Defend] = useState(null);
+  const [activePlayer, setActivePlayer] = useState('player1');
+  const [winner, setWinner] = useState(null);
+  const [gameActive, setGameActive] = useState(true);
   const onNodesChange = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     [],
@@ -76,12 +90,11 @@ export default function Page(){
   );
   
   const onNodeClick = useCallback((_, clickedNode) => {
-    console.log(playerSelection)
+    if(!gameActive){
+      return;
+    }
     if(playerSelection === 'attack'){
       setAttack(clickedNode)
-      for(const node of nodes){
-      console.log(`${node.id}: ${node.data.interactions['player1'].intent}`)
-    }
     }
     if(playerSelection === 'defend'){
       setDefend(clickedNode)
@@ -90,7 +103,7 @@ export default function Page(){
 
   function setAttack(clickedNode){
     if((!hasConnectedNodeWith(clickedNode.id, nodes, edges, (n) => n.data?.owner === activePlayer)
-      || clickedNode.data.owner !== null)){
+      || clickedNode.data.owner === activePlayer)){
       return
     }
     setNodes((nds) => {
@@ -142,21 +155,21 @@ export default function Page(){
     setNodes((nds) => {
       // PASS 1 — clear previous selection
       const cleared = nds.map((node) => {
-        const intent = node.data.interactions?.[activePlayer]?.intent;
+      const intent = node.data.interactions?.[activePlayer]?.intent;
 
-        if (intent === 'defend') {
-          return {
-            ...node,
-            data: {
-              ...node.data,
-              interactions: {
-                ...node.data.interactions,
-                [activePlayer]: { intent: null },
-              },
+      if (intent === 'defend') {
+        return {
+          ...node,
+          data: {
+            ...node.data,
+            interactions: {
+              ...node.data.interactions,
+              [activePlayer]: { intent: null },
             },
-          };
-        }
-        return node;
+          },
+        };
+      }
+      return node;
       });
       const updated = cleared.map((node) =>
         node.id === clickedNode.id
@@ -177,6 +190,9 @@ export default function Page(){
   }
 
   function selectConfirm(){
+    if(!gameActive){
+      return;
+    }
     if(activePlayer === 'player1'){
       setActivePlayer('player2')
     } 
@@ -189,7 +205,7 @@ export default function Page(){
   function resolve(){
     setNodes((nds) => {
       const outcomes = new Map();
-
+      // Determine intents for every node, determine what state is occuring
       for (const node of nds) {
         const interactions = node.data.interactions ?? {};
         const entries = Object.entries(interactions);
@@ -199,28 +215,34 @@ export default function Page(){
 
         // Case 1: both attack → nothing happens
         if (intents.every(i => i === 'attack')) {
-          outcomes.set(node.id, { type: 'none' });
+          outcomes.set(node.id,{ sourceNodeId: node.id, targetNodeId: node.id, type: 'none' });
         }
+        // Case 2: Reversal 
         else if (intents.includes('attack') && intents.includes('defend')) {
           const attacker = entries.find(([, v]) => v.intent === 'attack')[0];
           const defender = entries.find(([, v]) => v.intent === 'defend')[0];
-
-          outcomes.set(node.id, {
-            type: 'attack-defend',
-            attacker,
-            defender,
+          const connected = getConnectedNodesWith(
+            node.id, nodes, edges, (node) =>  node.data.owner !== defender )[0]
+          outcomes.set(connected.id,{
+            type: 'flip',
+            sourceNodeId: node.id,
+            targetNodeId: connected,
+            newOwner: defender
           });
         }
         // Case 3: single attack (capture)
         else if (intents.includes('attack') && intents.includes(null)) {
           const attacker = entries.find(([, v]) => v.intent === 'attack')[0];
 
-          outcomes.set(node.id, {
+          outcomes.set(node.id,{
+            sourceNodeId: node.id,
+            targetNodeId: node.id,
             type: 'capture',
-            attacker,
+            newOwner: attacker
           });
         }
       }
+      // Resolve each state
       let updated = nds.map((node) => {
       const outcome = outcomes.get(node.id);
 
@@ -228,21 +250,28 @@ export default function Page(){
 
       // Capture
       if (outcome.type === 'capture') {
+        console.log('outcome capture: ',outcome)
         return {
           ...node,
           data: {
             ...node.data,
-            owner: outcome.attacker,
+            owner: outcome.newOwner,
           },
         };
       }
 
-      // Attack + Defend (reversal logic placeholder)
-      if (outcome.type === 'attack-defend') {
-        // Example: no ownership change yet
-        return node;
+      // Attack + Defend
+      if (outcome.type === 'flip') {
+        console.log('outcome flip: ',outcome)
+        return {
+          ...node, 
+          data: {
+            ...node.data, 
+            owner: outcome.newOwner
+          }
+        }
+          
       }
-
       // Both attack → no change
       return node;
     });
@@ -254,8 +283,26 @@ export default function Page(){
     },
     }));
 
+
     return updated;
     })
+    // Check if the game is over 
+    const baseNodes = nodes.filter(
+      (node) => node.type === 'baseNode'
+    );
+    const contestedBases = baseNodes.filter(
+      (node) => node.data.owner !== node.data.baseOwner
+    );
+    if(contestedBases.length === 0){
+      return;
+    }
+    else if(contestedBases.length === 1){
+      setWinner(contestedBases[0].data.owner);
+      setGameActive(false);
+    } else if(contestedBases.length === 2){
+      setWinner("Draw");
+      setGameActive(false);
+    }
   };
 
 
@@ -266,6 +313,7 @@ export default function Page(){
       player2: { intent: null },
     };
   }
+
   function getConnectedNodes(nodeId, nodes, edges) {
     const connectedIds = edges.flatMap((edge) => {
       if (edge.source === nodeId) return [edge.target];
@@ -280,6 +328,15 @@ export default function Page(){
     return connectedNodes.some(predicate);
   }
 
+  function getConnectedNodesWith(nodeId, nodes, edges, predicate) {
+    const connectedNodes = getConnectedNodes(nodeId, nodes, edges);
+    console.log(`connected nodes: `, connectedNodes)
+    return connectedNodes.filter(predicate);
+  }
+
+  function resetGame(){
+    
+  }
 
   return(<main>
       <div className="mx-8 md:mx-auto max-w-4xl text-xl">
@@ -334,6 +391,11 @@ export default function Page(){
               onClick={() => selectConfirm()}>
                 Confirm
               </button>
+            </div>
+            <div>
+              {!gameActive && <div>
+              <p>{winner} wins!</p>
+              <button onClick={() => resetGame()}></button></div>}
             </div>
           </div>
         </div>
