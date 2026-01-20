@@ -110,6 +110,12 @@ export default function Page(){
       || clickedNode.data.owner === activePlayer)){
       return
     }
+    if(activePlayer === 'player1'){
+      setplayer1Attack(true);
+    } 
+    else if(activePlayer === 'player2'){
+      setplayer2Attack(true);
+    }
     setNodes((nds) => {
     // PASS 1 — clear previous selection
     const cleared = nds.map((node) => {
@@ -156,6 +162,12 @@ export default function Page(){
         && clickedNode.data.owner === activePlayer)){
           return 
         }
+    if(activePlayer === 'player1'){
+      setplayer1Defend(true);
+    } 
+    else if(activePlayer === 'player2'){
+      setplayer2Defend(true);
+    }
     setNodes((nds) => {
       // PASS 1 — clear previous selection
       const cleared = nds.map((node) => {
@@ -197,10 +209,10 @@ export default function Page(){
     if(!gameActive){
       return;
     }
-    if(activePlayer === 'player1'){
+    if(activePlayer === 'player1' && player1Attack && player1Defend){
       setActivePlayer('player2')
     } 
-    if(activePlayer === 'player2'){
+    if(activePlayer === 'player2' && player2Attack && player2Defend){
       resolve()
       setActivePlayer('player1')
     }
@@ -248,47 +260,63 @@ export default function Page(){
       }
       // Resolve each state
       let updated = nds.map((node) => {
-      const outcome = outcomes.get(node.id);
+        const outcome = outcomes.get(node.id);
 
-      if (!outcome) return node;
+        if (!outcome) return node;
 
-      // Capture
-      if (outcome.type === 'capture') {
-        console.log('outcome capture: ',outcome)
-        return {
-          ...node,
-          data: {
-            ...node.data,
-            owner: outcome.newOwner,
-          },
-        };
-      }
-
-      // Attack + Defend
-      if (outcome.type === 'flip') {
-        console.log('outcome flip: ',outcome)
-        return {
-          ...node, 
-          data: {
-            ...node.data, 
-            owner: outcome.newOwner
-          }
+        // Capture
+        if (outcome.type === 'capture') {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              owner: outcome.newOwner,
+            },
+          };
         }
-          
-      }
-      // Both attack → no change
-      return node;
-    });
-    updated = updated.map((node) => ({
-    ...node,
-    data: {
-      ...node.data,
-      interactions: clearIntents(node.data.interactions),
-    },
-    }));
-    return updated;
+
+        // Attack + Defend
+        if (outcome.type === 'flip') {
+          console.log('outcome flip: ',outcome)
+          return {
+            ...node, 
+            data: {
+              ...node.data, 
+              owner: outcome.newOwner
+            }
+          }
+            
+        }
+        // Both attack → no change
+        return node;
+      });
+      // Clear intents, enforce final rule that nodes must be connected to owned node 
+      updated = updated.map((node) => {
+        if(hasConnectedNodeWith(node.id, updated, edges, (n) => n.data.owner === node.data.owner) || node.type === 'baseNode'){
+          return{
+            ...node,
+            data: {
+              ...node.data,
+              interactions: clearIntents(node.data.interactions),
+            },
+          }
+        } else{
+          return{
+            ...node, 
+            data: {
+              ...node.data, 
+              owner: null,
+              interactions: clearIntents(node.data.interactions),
+            }
+          }
+        }  
+      });
+      return updated;
     })
-    
+    setplayer1Attack(null);
+    setplayer2Attack(null);
+    setplayer1Defend(null);
+    setplayer2Defend(null);
   };
 
   useEffect(() => {
