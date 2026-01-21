@@ -2,13 +2,20 @@
 import { useState, useCallback, useEffect } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { useReactFlow } from '@xyflow/react';
 import GameNode from '@/app/components/GraphGame/gameNode';
 import BaseNode from '@/app/components/GraphGame/baseNode';
 import { GameContext } from '@/app/components/GraphGame/gameContext';
 
-const createGameNode = (id, type, position) => ({
-  id: id, type: type, position: position,
+const createGameNode = (position, file, rank) => ({
+  id: `n${file}.${rank}`, 
+  type: 'gameNode', 
+  position: position,
   data: {
+    coords: {
+      file: file,
+      rank: rank,
+    },
     owner: null,  
     interactions: {
       player1: { intent: null },  
@@ -17,9 +24,15 @@ const createGameNode = (id, type, position) => ({
   }
 })
 
-const createBaseNode = (id, type, position, player) => ({
-  id: id, type: type, position: position,
+const createBaseNode = (position, file, rank, player) => ({
+  id: `n${file}.${rank}`, 
+  type: 'baseNode', 
+  position: position,
   data: {
+    coords:{ 
+      file: file, 
+      rank: rank,
+    },
     owner: player, 
     baseOwner: player, 
     interactions: {
@@ -31,38 +44,55 @@ const createBaseNode = (id, type, position, player) => ({
 
 function createInitialNodes() {
   return [
-    createBaseNode('n1', 'baseNode', { x: -200, y: 0 }, 'player1'),
-    createGameNode('n2', 'gameNode', { x: -200, y: 100 }),
-    createGameNode('n3', 'gameNode', { x: -200, y: 200 }),
-    createGameNode('n4', 'gameNode', { x: -200, y: 300 }),
-    createBaseNode('n5', 'baseNode', { x: -200, y: 400 }, 'player2'),
+    createBaseNode({ x: -200, y: 0 }, 1, 1,  'player1'),
+    createGameNode({ x: -200, y: 100 }, 1, 2),
+    createGameNode({ x: -200, y: 200 }, 1, 3),
+    createGameNode({ x: -200, y: 300 }, 1, 4),
+    createBaseNode({ x: -200, y: 400 }, 1, 5, 'player2'),
 
-    createBaseNode('n6', 'baseNode', { x: 0, y: 0 }, 'player1'),
-    createGameNode('n7', 'gameNode', { x: 0, y: 100 }),
-    createGameNode('n8', 'gameNode', { x: 0, y: 200 }),
-    createGameNode('n9', 'gameNode', { x: 0, y: 300 }),
-    createBaseNode('n10', 'baseNode', { x: 0, y: 400 }, 'player2'),
+    createBaseNode({ x: 0, y: -50 }, 2, 1, 'player1'),
+    createGameNode({ x: 0, y: 50 }, 2, 2),
+    createGameNode({ x: 0, y: 150 }, 2, 3),
+    createGameNode({ x: 0, y: 250 }, 2, 4),
+    createGameNode({ x: 0, y: 350 }, 2, 5),
+    createBaseNode({ x: 0, y: 450 }, 2, 6, 'player2'),
 
-    createBaseNode('n11', 'baseNode', { x: 200, y: 0 }, 'player1'),
-    createGameNode('n12', 'gameNode', { x: 200, y: 100 }),
-    createGameNode('n13', 'gameNode', { x: 200, y: 200 }),
-    createGameNode('n14', 'gameNode', { x: 200, y: 300 }),
-    createBaseNode('n15', 'baseNode', { x: 200, y: 400 }, 'player2'),
+    createBaseNode({ x: 200, y: 0 }, 3, 1, 'player1'),
+    createGameNode({ x: 200, y: 100 }, 3, 2),
+    createGameNode({ x: 200, y: 200 }, 3, 3),
+    createGameNode({ x: 200, y: 300 }, 3, 4),
+    createBaseNode({ x: 200, y: 400 }, 3, 5, 'player2'),
   ];
 }
-const initialEdges = [{ id: 'n1-n2', source: 'n1', target: 'n2',}, 
-                      { id: 'n2-n3', source: 'n2', target: 'n3'}, 
-                      { id: 'n3-n4', source: 'n3', target: 'n4'}, 
-                      { id: 'n4-n5', source: 'n4', target: 'n5'},
-                      { id: 'n6-n7', source: 'n6', target: 'n7'},
-                      { id: 'n7-n8', source: 'n7', target: 'n8'},
-                      { id: 'n8-n9', source: 'n8', target: 'n9'},
-                      { id: 'n9-n10', source: 'n9', target: 'n10'},
-                      { id: 'n11-n12', source: 'n11', target: 'n12'},
-                      { id: 'n12-n13', source: 'n12', target: 'n13'},
-                      { id: 'n13-n14', source: 'n13', target: 'n14'},
-                      { id: 'n14-n15', source: 'n14', target: 'n15'},
-];
+
+const createEdge = (source, target) => (
+  {  
+    id: `${source}-${target}`,
+    source: source,
+    target: target,
+    sourceHandle: 'bot',
+    targetHandle: 'top'
+  })
+
+function createInitialEdges() {
+  return [
+    createEdge('n1.1', 'n1.2'),
+    createEdge('n1.2', 'n1.3'),
+    createEdge('n1.3', 'n1.4'),
+    createEdge('n1.4', 'n1.5'),
+
+    createEdge('n2.1', 'n2.2'),
+    createEdge('n2.2', 'n2.3'),
+    createEdge('n2.3', 'n2.4'),
+    createEdge('n2.4', 'n2.5'),
+    createEdge('n2.5', 'n2.6'),
+
+    createEdge('n3.1', 'n3.2'),
+    createEdge('n3.2', 'n3.3'),
+    createEdge('n3.3', 'n3.4'),
+    createEdge('n3.4', 'n3.5'),
+  ];
+}
 
 const nodeTypes = {
   gameNode: GameNode,
@@ -71,15 +101,18 @@ const nodeTypes = {
 
 export default function Page(){
   const [nodes, setNodes] = useState(createInitialNodes);
-  const [edges, setEdges] = useState(initialEdges);
+  const [edges, setEdges] = useState(createInitialEdges);
   const [player1Attack, setplayer1Attack] = useState(null);
   const [player1Defend, setplayer1Defend] = useState(null);
+  const [player1Edge, setPlayer1Edge] = useState(null);
   const [playerSelection, setplayerSelection] = useState('attack');
   const [player2Attack, setplayer2Attack] = useState(null);
   const [player2Defend, setplayer2Defend] = useState(null);
+  const [player2Edge, setPlayer2Edge] = useState(null);
   const [activePlayer, setActivePlayer] = useState('player1');
   const [winner, setWinner] = useState(null);
   const [gameActive, setGameActive] = useState(true);
+  const { getNode } = useReactFlow();
   const onNodesChange = useCallback(
     (changes) => setNodes((nodesSnapshot) => applyNodeChanges(changes, nodesSnapshot)),
     [],
@@ -372,11 +405,36 @@ export default function Page(){
 
   function resetGame(){
     setNodes(createInitialNodes());
+    setEdges(createInitialEdges())
     setplayerSelection('attack');
     setActivePlayer('player1');
     setWinner(null);
     setGameActive(true);
   }
+
+  const isValidConnection = (connection) => {
+  const { source, target, sourceHandle, targetHandle } = connection;
+  if (!sourceHandle || !targetHandle) return false;
+  const sourceNode = getNode(source);
+  const targetNode = getNode(target);
+  if (!sourceNode || !targetNode) return false;
+  if(sourceGroups.file === targetGroups.file && sourceNode.data.coords.file - targetGroups.data.coords.file !== 1){
+    return false; 
+  } 
+  if(sourceGroups.file - targetGroups.file !== 1){
+    return false; 
+  }
+  const middleNode = [sourceNode, targetNode].find(n => n.data.coords.file === 2);
+  const otherNode = [sourceNode, targetNode].find(n => n.file !== 2);
+  const rankDifference = middleNode.data.coords.rank - otherNode.data.coords.rank;
+  if(rankDifference !== 0 || rankDifference !== 1 ){
+    return false; 
+  }
+  return (
+    (sourceHandle === 'top' && targetHandle === 'bottom') ||
+    (sourceHandle === 'bottom' && targetHandle === 'top')
+  );
+};
 
   return(<main>
       <div className="mx-8 md:mx-auto max-w-4xl text-xl">
@@ -392,6 +450,8 @@ export default function Page(){
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
               onNodeClick={onNodeClick}
+              isValidConnection={isValidConnection}
+              connectionMode = 'Loose'
               nodesDraggable={false}
               panOnDrag={false}
               zoomOnScroll={false}

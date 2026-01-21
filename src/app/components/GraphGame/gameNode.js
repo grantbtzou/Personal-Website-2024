@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { GameContext } from './gameContext';
 
-function GameNode({ data = {} }) {
+function GameNode({ id, data = {} }) {
 const { activePlayer } = useContext(GameContext);
 const intent = data.interactions?.[activePlayer]?.intent;
   return (
@@ -19,13 +19,15 @@ const intent = data.interactions?.[activePlayer]?.intent;
       }`}
     >
        <Handle
-        type="target"
+        id = 'top'
+        type="source"
         position={Position.Top}
       />
       
       <div>{}</div>
 
       <Handle
+        id = 'bot'
         type="source"
         position={Position.Bottom}
       />

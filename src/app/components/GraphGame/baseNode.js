@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { GameContext } from './gameContext';
 
-function BaseNode({ data = {} }) {
+function BaseNode({ id, data = {} }) {
 const { activePlayer } = useContext(GameContext);
 const intent = data.interactions?.[activePlayer]?.intent;
   return (
@@ -17,13 +17,17 @@ const intent = data.interactions?.[activePlayer]?.intent;
           ? 'bg-blue-500'
           : 'bg-white'
       }`}>
-       {data.owner === 'player2' && (<Handle
+       {data.baseOwner === 'player2' && (
+        <Handle
+        id = 'top'
         type="target"
         position={Position.Top}
       />)}
       
       <div>{}</div>
-        {data.owner === 'player1' && (<Handle
+        {data.baseOwner === 'player1' && (
+        <Handle
+        id = 'bot'
         type="source"
         position={Position.Bottom}
       />)}
