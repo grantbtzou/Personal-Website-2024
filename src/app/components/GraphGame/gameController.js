@@ -104,12 +104,11 @@ function GameController(){
   const [edges, setEdges] = useState(createInitialEdges);
   const [player1Attack, setplayer1Attack] = useState(null);
   const [player1Defend, setplayer1Defend] = useState(null);
-  const [player1Edge, setPlayer1Edge] = useState(null);
   const [playerSelection, setplayerSelection] = useState('attack');
   const [player2Attack, setplayer2Attack] = useState(null);
   const [player2Defend, setplayer2Defend] = useState(null);
-  const [player2Edge, setPlayer2Edge] = useState(null);
   const [activePlayer, setActivePlayer] = useState('player1');
+  const [edgeSet, setEdgeSet] = useState(false);
   const [winner, setWinner] = useState(null);
   const [gameActive, setGameActive] = useState(true);
   const { getNode } = useReactFlow();
@@ -244,10 +243,12 @@ function GameController(){
     }
     if(activePlayer === 'player1' && player1Attack && player1Defend){
       setActivePlayer('player2')
+      setEdgeSet(false);
     } 
     if(activePlayer === 'player2' && player2Attack && player2Defend){
       resolve()
       setActivePlayer('player1')
+      setEdgeSet(false);
     }
   }
 
@@ -411,29 +412,37 @@ function GameController(){
     setGameActive(true);
   }
 
-  const isValidConnection = (connection) => {
+  const isValidConnection = useCallback((connection) => {
+    if(edgeSet){
+      return false;
+    }
     const { source, target, sourceHandle, targetHandle } = connection;
     if (!sourceHandle || !targetHandle) return false;
     const sourceNode = getNode(source);
     const targetNode = getNode(target);
     if (!sourceNode || !targetNode) return false;
-    if(sourceGroups.file === targetGroups.file && sourceNode.data.coords.file - targetGroups.data.coords.file !== 1){
+    if(sourceNode.data.coords.file === targetNode.data.coords.file && sourceNode.data.coords.file - targetNode.data.coords.file !== 1){
       return false; 
     } 
-    if(sourceGroups.file - targetGroups.file !== 1){
+    if(Math.abs(sourceNode.data.coords.file - targetNode.data.coords.file) !== 1){
       return false; 
     }
     const middleNode = [sourceNode, targetNode].find(n => n.data.coords.file === 2);
-    const otherNode = [sourceNode, targetNode].find(n => n.file !== 2);
+    const otherNode = [sourceNode, targetNode].find(n => n.data.coords.file !== 2);
     const rankDifference = middleNode.data.coords.rank - otherNode.data.coords.rank;
-    if(rankDifference !== 0 || rankDifference !== 1 ){
+    if(rankDifference < 0 || rankDifference > 1){
       return false; 
     }
-    return (
-      (sourceHandle === 'top' && targetHandle === 'bottom') ||
-      (sourceHandle === 'bottom' && targetHandle === 'top')
-    );
-  };
+    if(edges.some(
+      (edge) =>
+        (edge.source === source &&
+        edge.target === target) || 
+        (edge.source === target && 
+        edge.target === source)
+    )){ return false }
+    setEdgeSet(true);
+    return true;
+  }, [edges, edgeSet])
   const contextValue = useMemo(() => ({
     activePlayer,
     setAttack,
