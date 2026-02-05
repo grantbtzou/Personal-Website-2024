@@ -7,10 +7,12 @@ import {
   useState,
   useEffect
 } from "react";
+import { useRouter } from "next/navigation";
 
 const WebSocketContext = createContext(null);
 
 export function WebSocketProvider({ children }) {
+  const router = useRouter();
   const socketRef = useRef(null);
   const [socket, setSocket] = useState(null);
 
@@ -21,13 +23,12 @@ export function WebSocketProvider({ children }) {
   const [message, setMessage] = useState("");
   const [inputCode, setInputCode] = useState("");
 
-  useEffect(() => {
+  function connect(){
     if (socketRef.current) return;
 
     const ws = new WebSocket("ws://localhost:8080");
     socketRef.current = ws;
     setSocket(ws);
-
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
 
@@ -37,11 +38,12 @@ export function WebSocketProvider({ children }) {
           setInvalidRoom(false);
           setConnectedRoom(msg.roomId);
           setPlayerId(msg.playerId);
+          router.push(`WebSocketTest/game/${msg.roomId}`);
           break;
 
         case "INVALIDROOM":
           setInvalidRoom(true);
-          socket.close();
+          ws.close();
           break;
 
         case "CHAT":
@@ -55,22 +57,25 @@ export function WebSocketProvider({ children }) {
 
     ws.onclose = () => {
       socketRef.current = null;
+      setSocket(null);
     };
-
-    return () => ws.close();
-  }, []);
+    
+    return ws;
+  }
 
   return (
     <WebSocketContext.Provider
       value={{
         socket: socket,
+        connect,
         connectedRoom,
         playerId,
         invalidRoom,
         messages,
         message,
         setMessage,
-        setInputCode
+        inputCode,
+        setInputCode,
       }}
     >
       {children}

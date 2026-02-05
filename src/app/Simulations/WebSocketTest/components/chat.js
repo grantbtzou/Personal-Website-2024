@@ -2,10 +2,14 @@ import { useSocket } from "./websocketprovider";
 
 
 export default function Chat(){
-  const { socket,
+  const { 
+    socket,
     message,
     setMessage, 
     messages,
+    connectedRoom,
+    playerId,
+
   } = useSocket();
 
   const sendMessage = () => {
@@ -13,7 +17,7 @@ export default function Chat(){
     socket.send(
       JSON.stringify({
         type: "CHAT",
-        text: input, 
+        text: message, 
         roomId: connectedRoom
       })
     );
@@ -32,7 +36,7 @@ export default function Chat(){
     </ul>
     <input
       value={message}
-      onChange={(e) => setInput(e.target.value)}
+      onChange={(e) => setMessage(e.target.value)}
       onKeyDown={(e) => e.key === "Enter" && sendMessage()}
     />
     <button onClick={sendMessage}>Send</button></div>}

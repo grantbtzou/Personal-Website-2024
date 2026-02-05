@@ -4,10 +4,8 @@ import { WebSocketProvider } from "./components/websocketprovider";
 
 export default function Page(){
   return (
-    <WebSocketProvider>
     <div className='mx-auto'>
       <NewGame/>
     </div>
-    </WebSocketProvider>
   );
 }

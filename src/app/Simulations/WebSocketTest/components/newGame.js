@@ -1,17 +1,24 @@
 import { useSocket } from "./websocketprovider";
 
 export default function NewGame(){
-  const { socket, inputCode, setInputCode, invalidRoom,} = useSocket();
+  const { socket, connect, inputCode, setInputCode, invalidRoom,} = useSocket();
   
   const createGame = () => {
-    socket.send(JSON.stringify({ type: "CREATEGAME" }))
+    const ws = connect();
+    ws.onopen = () => {
+      ws.send(JSON.stringify({ type: "CREATEGAME" }));
+    };
   };
 
   const joinRoom = () => {
-    socket.send(JSON.stringify({
-      type: "JOINGAME",
-      roomId: inputCode
-    }))
+    const ws = connect();
+    ws.onopen = () => {
+      console.log("JOIN SEND", inputCode, typeof inputCode);
+      ws.send(JSON.stringify({
+        type: "JOINGAME",
+        roomId: inputCode,
+      }));
+    };
   };
 
   return(<div>
