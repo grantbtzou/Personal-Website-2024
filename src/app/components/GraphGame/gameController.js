@@ -11,6 +11,7 @@ const createGameNode = (position, file, rank) => ({
   id: `n${file}.${rank}`, 
   type: 'gameNode', 
   position: position,
+  deletable: false,
   data: {
     coords: {
       file: file,
@@ -28,6 +29,7 @@ const createBaseNode = (position, file, rank, player) => ({
   id: `n${file}.${rank}`, 
   type: 'baseNode', 
   position: position,
+  deletable: false,
   data: {
     coords:{ 
       file: file, 
@@ -108,7 +110,10 @@ function GameController(){
   const [player2Attack, setplayer2Attack] = useState(null);
   const [player2Defend, setplayer2Defend] = useState(null);
   const [activePlayer, setActivePlayer] = useState('player1');
-  const [edgeSet, setEdgeSet] = useState(false);
+  const [player1Edge, setPlayer1Edge] = useState(null);
+  const [player2Edge, setPlayer2Edge] = useState(null);
+  const [player1EdgeDeletion, setPlayer1EdgeDeletion] = useState(null);
+  const [player2EdgeDeletion, setPlayer2EdgeDeletion] = useState(null);
   const [winner, setWinner] = useState(null);
   const [gameActive, setGameActive] = useState(true);
   const { getNode } = useReactFlow();
@@ -117,7 +122,23 @@ function GameController(){
     [],
   );
   const onEdgesChange = useCallback(
-    (changes) => setEdges((edgesSnapshot) => applyEdgeChanges(changes, edgesSnapshot)),
+    (changes) => {
+      setEdges((edgesSnapshot) => {
+        const filtered = changes.filter((change) => {
+          if(change.type !== 'remove'){
+            return true;
+          }
+          const edge = edgesSnapshot.find((e) => e.id === change.id);
+          const sourceNode = nodes.find((n) => n.id === edge.source);
+          const targetNode = nodes.find((n) => n.id === edge.target);
+          if(sourceNode.data.owner !== activePlayer && targetNode.data.owner !== activePlayer){
+            return false;
+          } 
+          return true;
+        })
+        return applyEdgeChanges(filtered, edgesSnapshot)
+      })
+    }, 
     [],
   );
   const onConnect = useCallback(
@@ -242,13 +263,12 @@ function GameController(){
       return;
     }
     if(activePlayer === 'player1' && player1Attack && player1Defend){
+      console.log('setting active player to player2')
       setActivePlayer('player2')
-      setEdgeSet(false);
     } 
     if(activePlayer === 'player2' && player2Attack && player2Defend){
       resolve()
       setActivePlayer('player1')
-      setEdgeSet(false);
     }
   }
 
@@ -351,6 +371,8 @@ function GameController(){
     setplayer2Attack(null);
     setplayer1Defend(null);
     setplayer2Defend(null);
+    setPlayer1Edge(null);
+    setPlayer2Edge(null);
   };
 
   // Check if the game is over
@@ -413,7 +435,7 @@ function GameController(){
   }
 
   const isValidConnection = useCallback((connection) => {
-    if(edgeSet){
+    if((activePlayer === 'player1' && player1Edge !== null) || (activePlayer === 'player2' && player2Edge !== null)){
       return false;
     }
     const { source, target, sourceHandle, targetHandle } = connection;
@@ -440,9 +462,13 @@ function GameController(){
         (edge.source === target && 
         edge.target === source)
     )){ return false }
-    setEdgeSet(true);
+    if(activePlayer === 'player1'){
+      setPlayer1Edge({source: source, target: target});
+    } else if(activePlayer === 'player2'){
+      setPlayer2Edge({source: source, target: target});
+    }
     return true;
-  }, [edges, edgeSet])
+  }, [edges, player1Edge, player2Edge, activePlayer])
   const contextValue = useMemo(() => ({
     activePlayer,
     setAttack,
