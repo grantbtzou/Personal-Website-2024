@@ -1,4 +1,26 @@
+import { useSocket } from "./websocketprovider";
+
+
 export default function Chat(){
+  const { socket,
+    message,
+    setMessage, 
+    messages,
+  } = useSocket();
+
+  const sendMessage = () => {
+
+    socket.send(
+      JSON.stringify({
+        type: "CHAT",
+        text: input, 
+        roomId: connectedRoom
+      })
+    );
+
+    setMessage("");
+  };
+
   return(<div>
     {connectedRoom && <div>
     <h1>Connected room: {connectedRoom}</h1>
@@ -9,7 +31,7 @@ export default function Chat(){
       ))}
     </ul>
     <input
-      value={input}
+      value={message}
       onChange={(e) => setInput(e.target.value)}
       onKeyDown={(e) => e.key === "Enter" && sendMessage()}
     />
