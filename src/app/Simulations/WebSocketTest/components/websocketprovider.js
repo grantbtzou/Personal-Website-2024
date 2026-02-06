@@ -38,6 +38,7 @@ export function WebSocketProvider({ children }) {
           setInvalidRoom(false);
           setConnectedRoom(msg.roomId);
           setPlayerId(msg.playerId);
+          setMessages(msg.messages);
           if (!window.location.pathname.includes(`/game/${msg.roomId}`)) {
             router.push(`WebSocketTest/game/${msg.roomId}`);
           }
