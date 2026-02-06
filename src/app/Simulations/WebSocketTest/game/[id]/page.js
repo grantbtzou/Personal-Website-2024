@@ -5,6 +5,6 @@ import { useSocket } from "../../components/websocketprovider";
 export default function Page({ params }){
   const { id } = params;
   return(<div>
-    <GraphGame/>
+    <GraphGame roomId={id}/>
   </div>)
 }

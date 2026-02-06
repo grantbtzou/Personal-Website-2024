@@ -24,7 +24,7 @@ export function WebSocketProvider({ children }) {
   const [inputCode, setInputCode] = useState("");
 
   function connect(){
-    if (socketRef.current) return;
+    if (socketRef.current) return socketRef.current;
 
     const ws = new WebSocket("ws://localhost:8080");
     socketRef.current = ws;
@@ -38,7 +38,9 @@ export function WebSocketProvider({ children }) {
           setInvalidRoom(false);
           setConnectedRoom(msg.roomId);
           setPlayerId(msg.playerId);
-          router.push(`WebSocketTest/game/${msg.roomId}`);
+          if (!window.location.pathname.includes(`/game/${msg.roomId}`)) {
+            router.push(`WebSocketTest/game/${msg.roomId}`);
+          }
           break;
 
         case "INVALIDROOM":
