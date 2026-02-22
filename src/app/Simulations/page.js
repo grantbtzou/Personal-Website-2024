@@ -25,7 +25,7 @@ export default function Page(){
                     />
                     </div>
                     <div><Simulation
-                    Path="Simulations/WebSocketTest"
+                    Path="Simulations/websockettest"
                     Title="Web Socket Test"
                     />
                     </div>

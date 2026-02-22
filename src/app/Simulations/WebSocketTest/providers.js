@@ -1,6 +1,6 @@
 "use client";
 
-import { WebSocketProvider } from "./websocketprovider";
+import { WebSocketProvider } from "./Socket/websocketprovider";
 
 export default function Providers({ children }) {
   return(

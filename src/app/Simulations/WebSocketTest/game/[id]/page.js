@@ -1,10 +1,10 @@
 'use client'
-import GraphGame from "../../components/graphGame";
-import { useSocket } from "../../components/websocketprovider";
+import GraphGame from "./GraphGame/graphGame";
 
 export default function Page({ params }){
   const { id } = params;
   return(<div>
+    Page {id}
     <GraphGame roomId={id}/>
   </div>)
 }

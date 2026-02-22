@@ -1,4 +1,4 @@
-import Providers from "./components/providers.js";
+import Providers from "./providers.js";
 
 export default function GamePageLayout({ children }){
   return(
