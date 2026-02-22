@@ -27,7 +27,11 @@ export default function Chat(){
     <h1>Player id: {state.connection.playerId}</h1>
     <ul className="border-2">
       {state.chat.messages.map((m, i) => (
-        <li key={i}>Player {m.user}: {m.text} {new Date(m.timestamp).toLocaleString()}</li>
+        <li key={i}>Player {m.user}: {m.text} { new Date(m.timestamp).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+        })}</li>
       ))}
     </ul>
     <input

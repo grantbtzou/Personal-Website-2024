@@ -2,24 +2,18 @@ import { useSocket } from "./Socket/websocketprovider";
 import { useState } from "react";
 
 export default function NewGame(){
-  const { state, dispatch, connect,} = useSocket();
+  const { state, dispatch, connect, send} = useSocket();
   const [inputCode, setInputCode] = useState('');
+  
   const createGame = () => {
-    const ws = connect();
-    ws.onopen = () => {
-      ws.send(JSON.stringify({ type: "CREATEGAME" }));
-    };
+    send({ type: "CREATEGAME" })
   };
 
   const joinRoom = () => {
-    const ws = connect();
-    ws.onopen = () => {
-      console.log("JOIN SEND", inputCode, typeof inputCode);
-      ws.send(JSON.stringify({
-        type: "JOINGAME",
-        roomId: inputCode,
-      }));
-    };
+    send({
+      type: "JOINGAME",
+      roomId: inputCode,
+    });
   };
 
   return(

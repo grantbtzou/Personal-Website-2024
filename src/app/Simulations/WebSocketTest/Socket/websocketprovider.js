@@ -55,13 +55,17 @@ export function WebSocketProvider({ children }) {
   }
 
   const send = useCallback((message) => {
-    const ws = connect();
+    const ws = socketRef.current;
 
-    if (ws.readyState !== WebSocket.OPEN) return;
+    if (ws.readyState !== WebSocket.OPEN){
+      console.warn("Websocket not open");
+    };
 
     ws.send(JSON.stringify(message));
   }, []);
-
+  useEffect(()=>{
+    connect();
+  })
   return (
     <WebSocketContext.Provider value={{ state, dispatch, connect, send }}>
       {children}
