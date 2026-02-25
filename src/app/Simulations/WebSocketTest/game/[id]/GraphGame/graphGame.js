@@ -7,7 +7,7 @@ import BaseNode from "./GameComponents/baseNode";
 import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
 export default function GraphGame( { roomId }){
-  const { connect,send } = useSocket();
+  const { connect,send, state } = useSocket();
   useEffect(() => {
       const ws = connect();
       ws.onopen = () => {
@@ -18,8 +18,17 @@ export default function GraphGame( { roomId }){
     };
   }, []);
 
-  const [nodes, setNodes] = useState([]);
-  const [edges, setEdges] = useState([]);
+  const [nodes, setNodes] = useState(state.game.nodes);
+  const [edges, setEdges] = useState(state.game.edges);
+  useEffect(() => {
+    setNodes(state.game.nodes);
+    console.log("nodes changed"); 
+    console.log(JSON.stringify(nodes));
+  }, [state.game.nodes]);
+
+  useEffect(() => {
+    setEdges(state.game.edges);
+  }, [state.game.edges]);
   const [playerSelection, setplayerSelection] = useState('attack');
   const nodeTypes = {
     gameNode: GameNode,
@@ -27,15 +36,15 @@ export default function GraphGame( { roomId }){
   }
 
   const onNodesChange = useCallback(
-    (changes) => {
-      send({
-        type: "NODE_CHANGE_REQUEST",
-        roomId: roomId,
-        changes: changes
-      })
+    // (changes) => {
+    //   send({
+    //     type: "NODE_CHANGE_REQUEST",
+    //     roomId: roomId,
+    //     changes: changes
+    //   })
 
-    },
-    [roomId]
+    // },
+    // [roomId]
   );
 
   const onEdgesChange = useCallback(
@@ -50,6 +59,7 @@ export default function GraphGame( { roomId }){
   const isValidConnection = useCallback((connection) => {})
 
   const onNodeClick = useCallback((_, clickedNode) => {
+    console.log(clickedNode);
     if(playerSelection === 'attack'){
       send({  
         type: "SET_ATTACK", 
@@ -68,7 +78,7 @@ export default function GraphGame( { roomId }){
   
   return(
   <div>
-    <GameContext.Provider>
+
     <div className="mx-auto h-[500px] border-2 flex-1" >
       <ReactFlow
         nodes={nodes}
@@ -89,6 +99,5 @@ export default function GraphGame( { roomId }){
       />
     </div>
     <Chat/>
-    </GameContext.Provider>
   </div>)
 }

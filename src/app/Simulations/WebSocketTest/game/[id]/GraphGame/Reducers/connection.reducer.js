@@ -7,6 +7,7 @@ export function connectionReducer(state, action) {
         invalidRoom: false,
         connectedRoom: action.payload.roomId,
         playerId: action.payload.playerId,
+        playerOrder: action.payload.playerOrder,
       };
 
     case "INVALIDROOM":

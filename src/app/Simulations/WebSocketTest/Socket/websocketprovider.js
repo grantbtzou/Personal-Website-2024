@@ -29,7 +29,7 @@ export function WebSocketProvider({ children }) {
 
     ws.onmessage = (event) => {
       const msg = JSON.parse(event.data);
-
+      console.log(msg);
       dispatch({
         type: msg.type,
         payload: msg,

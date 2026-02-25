@@ -1,10 +1,10 @@
-import { useContext } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { GameContext } from '../gameContext';
+import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovider';
 
 function GameNode({ id, data = {} }) {
-const { activePlayer } = useContext(GameContext);
-const intent = data.interactions?.[activePlayer]?.intent;
+const { state, dispatch, } = useSocket();
+const intent = data.interactions?.[state.connection.playerOrder]?.intent;
+
   return (
     <div className={`h-16 w-16 rounded-full border-2 ${
         intent === 'attack'
