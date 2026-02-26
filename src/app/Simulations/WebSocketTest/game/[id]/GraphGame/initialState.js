@@ -3,6 +3,8 @@ export const initialGameState = {
     connectedRoom: null,
     playerId: null,
     invalidRoom: false,
+  },
+  match: {
     playerOrder: null,
     playerSelection: null,
     gameStatus: null,

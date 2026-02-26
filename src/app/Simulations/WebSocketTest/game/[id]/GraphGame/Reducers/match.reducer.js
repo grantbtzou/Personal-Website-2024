@@ -1,0 +1,18 @@
+export function matchReducer(state, action){
+  switch(action.type){
+    case "GAMECREATED":
+    case "SUCCESSFULCONNECTION":
+      return{
+        ...state,  
+        playerSelection: action.payload.playerSelection,
+        gameStatus: action.payload.gameStatus,
+      }
+    case "GAME_START":
+      return {
+        ...state, 
+        gameStatus: "IN_PROGRESS"
+      }
+    default: 
+      return state;
+  }
+}

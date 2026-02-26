@@ -15,7 +15,6 @@ export function gameStateReducer(state, action) {
         edges: action.payload.edges,
       };
     case "SELECTION_CHANGE":
-      console.log(action.payload.nodes);
       return{
         ...state, 
         nodes: action.payload.nodes, 
