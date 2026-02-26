@@ -29,7 +29,7 @@ export default function GraphGame( { roomId }){
   useEffect(() => {
     setEdges(state.game.edges);
   }, [state.game.edges]);
-  const [playerSelection, setplayerSelection] = useState('attack');
+  const [playerSelection, setplayerSelection] = useState(state.connection.playerSelection);
   const nodeTypes = {
     gameNode: GameNode,
     baseNode: BaseNode

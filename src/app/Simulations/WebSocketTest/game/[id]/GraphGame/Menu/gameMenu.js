@@ -1,0 +1,53 @@
+import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
+function GameMenu(){
+  const { 
+    setAttack,
+    setDefend,
+    resolve,
+    resetGame, 
+    selectConfirm,
+    winner } = useContext(GameContext)
+  const { dispatch, state, connect } = useSocket;
+  const playerSelection = state.connection.playerSelection;
+  const gameStatus = state.connection.gameStatus;
+  function setPlayerSelection(selection) {
+    if(gameStatus !== 'IN_PROGRESS'){
+      return;
+    }
+    const ws = connect(); 
+    ws.send(JSON.stringify({
+      type: "SET_SELECTION",
+      roomId: state.connection.connectedRoom,
+      selection: selection,
+    }))
+  }
+  return(
+  <div>
+    <div className={`border p-4`}>
+      <div>Player 1</div> 
+      <div className="border p-4">
+        <button className={`border p-4 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
+        onClick={() => {setPlayerSelection("attack"); }}>
+          Attack
+        </button>
+        <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
+        onClick={() => {setPlayerSelection("defend"); }}>
+          Defend
+        </button>
+      </div>
+      <button className="border p-4"
+      onClick={() => selectConfirm()}>
+        Confirm
+      </button>
+    </div>
+
+    <div>
+      {gameStatus === 'COMPLETE' && winner === 'draw' && <div>
+      <p>Draw</p></div>}
+      {gameStatus === 'COMPLETE' && winner !== 'draw' && <div>
+      <p>{winner} wins</p></div>}
+    </div>
+  </div>)
+}
+
+export default GameMenu;

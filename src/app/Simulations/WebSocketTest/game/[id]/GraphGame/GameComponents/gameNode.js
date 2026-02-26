@@ -4,7 +4,6 @@ import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovi
 function GameNode({ id, data = {} }) {
 const { state, dispatch, } = useSocket();
 const intent = data.interactions?.[state.connection.playerOrder]?.intent;
-
   return (
     <div className={`h-16 w-16 rounded-full border-2 ${
         intent === 'attack'

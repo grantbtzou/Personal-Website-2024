@@ -2,6 +2,7 @@ export function connectionReducer(state, action) {
   switch (action.type) {
     case "GAMECREATED":
     case "SUCCESSFULCONNECTION":
+      console.log(action.payload.playerOrder)
       return {
         ...state,
         invalidRoom: false,
@@ -15,7 +16,11 @@ export function connectionReducer(state, action) {
         ...state,
         invalidRoom: true,
       };
-
+    case "GAME_START":
+      return {
+        ...state, 
+        gameStatus: "IN_PROGRESS"
+      }
     default:
       return state;
   }

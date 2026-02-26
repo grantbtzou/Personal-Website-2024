@@ -4,6 +4,8 @@ export const initialGameState = {
     playerId: null,
     invalidRoom: false,
     playerOrder: null,
+    playerSelection: null,
+    gameStatus: null,
   },
   chat: {
     messages: [],
