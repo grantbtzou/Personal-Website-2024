@@ -1,25 +1,30 @@
 import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
+import { useState } from "react";
 function GameMenu(){
-  const { 
-    setAttack,
-    setDefend,
-    resolve,
-    resetGame, 
-    selectConfirm,
-    winner } = useContext(GameContext)
-  const { dispatch, state, connect } = useSocket;
-  const playerSelection = state.connection.playerSelection;
+  const [confirmed, setConfirmed] = useState(false);
+  const { dispatch, state, connect } = useSocket();
+  const ws = connect()
+  const playerSelection = state.match.playerSelection;
+  console.log("playerSelection: " + playerSelection);
   const gameStatus = state.connection.gameStatus;
   function setPlayerSelection(selection) {
     if(gameStatus !== 'IN_PROGRESS'){
       return;
     }
-    const ws = connect(); 
     ws.send(JSON.stringify({
       type: "SET_SELECTION",
       roomId: state.connection.connectedRoom,
       selection: selection,
     }))
+  }
+  function selectConfirm(){
+    setConfirmed(!confirmed);
+    ws.send(JSON.stringify({
+      type: "CONFIRM_SELECTION",
+      roomId: state.connection.connectedRoom, 
+    
+    }))
+    
   }
   return(
   <div>

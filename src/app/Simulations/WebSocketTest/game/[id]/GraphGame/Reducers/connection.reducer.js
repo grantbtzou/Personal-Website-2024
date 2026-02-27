@@ -16,11 +16,7 @@ export function connectionReducer(state, action) {
         ...state,
         invalidRoom: true,
       };
-    case "GAME_START":
-      return {
-        ...state, 
-        gameStatus: "IN_PROGRESS"
-      }
+  
     default:
       return state;
   }

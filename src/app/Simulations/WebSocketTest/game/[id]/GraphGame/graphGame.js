@@ -6,6 +6,7 @@ import GameNode from "./GameComponents/gameNode";
 import BaseNode from "./GameComponents/baseNode";
 import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
+import GameMenu from "./Menu/gameMenu";
 export default function GraphGame( { roomId }){
   const { connect,send, state } = useSocket();
   useEffect(() => {
@@ -79,7 +80,7 @@ export default function GraphGame( { roomId }){
   return(
   <div>
 
-    <div className="mx-auto h-[500px] border-2 flex-1" >
+    <div className="mx-auto h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -97,7 +98,11 @@ export default function GraphGame( { roomId }){
         zoomOnDoubleClick={false}
         fitView
       />
+      <div className="flex-col">
+        <GameMenu/>
+        <Chat/>
+      </div>
     </div>
-    <Chat/>
+   
   </div>)
 }
