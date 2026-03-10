@@ -22,7 +22,7 @@ export function WebSocketProvider({ children }) {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   useEffect(() => {
     if(state.connection.reconnectToken){ 
-      localStorage.setItem("reconnectToken", state.connection.reconnectToken);
+      sessionStorage.setItem("reconnectToken", state.connection.reconnectToken);
     }
   },[state.connection.reconnectToken])
   function connect() {
