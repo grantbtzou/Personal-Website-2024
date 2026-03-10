@@ -3,6 +3,7 @@ export function gameStateReducer(state, action) {
   switch (action.type) {
     case "GAMECREATED":
     case "SUCCESSFULCONNECTION":
+    case "RECONNECT_SUCCESS":
       return {
         ...state, 
         nodes: action.payload.nodes, 

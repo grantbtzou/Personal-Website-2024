@@ -20,7 +20,11 @@ export function WebSocketProvider({ children }) {
   const socketRef = useRef(null);
 
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
-
+  useEffect(() => {
+    if(state.connection.reconnectToken){ 
+      localStorage.setItem("reconnectToken", state.connection.reconnectToken);
+    }
+  },[state.connection.reconnectToken])
   function connect() {
     if (socketRef.current) return socketRef.current;
 
@@ -34,7 +38,7 @@ export function WebSocketProvider({ children }) {
         type: msg.type,
         payload: msg,
       });
-
+      
       if (
         (msg.type === "GAMECREATED" || msg.type === "SUCCESSFULCONNECTION") &&
         !window.location.pathname.includes(`/game/${msg.roomId}`)

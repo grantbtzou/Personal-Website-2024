@@ -1,8 +1,24 @@
 'use client'
+import { useEffect } from "react";
 import GraphGame from "./GraphGame/graphGame";
+import { useSocket } from "../../Socket/websocketprovider"; 
 
 export default function Page({ params }){
   const { id } = params;
+  const { state, dispatch, connect, send} = useSocket();
+  useEffect(() => { 
+    const reconnectToken = localStorage.getItem("reconnectToken");
+    console.log("reconnectToken: ", reconnectToken);
+    if(reconnectToken){ 
+      const ws = connect();
+      ws.onopen = () => {
+        ws.send(JSON.stringify({
+          type: "RECONNECT",
+          reconnectToken: reconnectToken,
+        }))
+      }
+    }
+  })
   return(<div>
     Page {id}
     <GraphGame roomId={id}/>

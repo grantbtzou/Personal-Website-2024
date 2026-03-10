@@ -3,6 +3,7 @@ export const initialGameState = {
     connectedRoom: null,
     playerId: null,
     invalidRoom: false,
+    reconnectToken: null,
   },
   match: {
     playerOrder: null,

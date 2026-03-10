@@ -2,6 +2,7 @@ export function matchReducer(state, action){
   switch(action.type){
     case "GAMECREATED":
     case "SUCCESSFULCONNECTION":
+    case "RECONNECT_SUCCESS":
       return{
         ...state,  
         playerSelection: action.payload.playerSelection,
