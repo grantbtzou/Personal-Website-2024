@@ -6,12 +6,12 @@ export default function NewGame(){
   const [inputCode, setInputCode] = useState('');
   
   const createGame = () => {
-    send({ type: "CREATEGAME" })
+    send({ type: "CREATE_GAME" })
   };
 
   const joinRoom = () => {
     send({
-      type: "JOINGAME",
+      type: "JOIN_GAME",
       roomId: inputCode,
     });
   };

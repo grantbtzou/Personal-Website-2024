@@ -13,7 +13,7 @@ export default function GraphGame( { roomId }){
       const ws = connect();
       ws.onopen = () => {
       ws.send(JSON.stringify({
-        type: "JOINGAME",
+        type: "JOIN_GAME",
         roomId: roomId,
       }));
     };

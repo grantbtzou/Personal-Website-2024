@@ -40,13 +40,13 @@ export function WebSocketProvider({ children }) {
       });
       
       if (
-        (msg.type === "GAMECREATED" || msg.type === "SUCCESSFULCONNECTION") &&
+        (msg.type === "GAME_CREATED" || msg.type === "SUCCESSFUL_CONNECTION") &&
         !window.location.pathname.includes(`/game/${msg.roomId}`)
       ) {
         router.push(`websockettest/game/${msg.roomId}`);
       }
 
-      if (msg.type === "INVALIDROOM") {
+      if (msg.type === "INVALID_ROOM") {
         ws.close();
       }
     };

@@ -1,7 +1,7 @@
 export function connectionReducer(state, action) {
   switch (action.type) {
-    case "GAMECREATED":
-    case "SUCCESSFULCONNECTION":
+    case "GAME_CREATED":
+    case "SUCCESSFUL_CONNECTION":
     case "RECONNECT_SUCCESS":
       console.log(action.payload.playerOrder)
       return {
@@ -13,7 +13,7 @@ export function connectionReducer(state, action) {
         reconnectToken: action.payload.reconnectToken,
       };
     
-    case "INVALIDROOM":
+    case "INVALID_ROOM":
       return {
         ...state,
         invalidRoom: true,
