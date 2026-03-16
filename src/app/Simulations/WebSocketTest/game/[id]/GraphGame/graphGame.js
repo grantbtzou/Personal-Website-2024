@@ -102,6 +102,9 @@ export default function GraphGame( { roomId }){
         <GameMenu/>
         <Chat/>
       </div>
+      {state.connection.error && (
+        <p className="text-red-500">Error:{state.connection.error}</p>
+      )}
     </div>
    
   </div>)

@@ -18,7 +18,11 @@ export function connectionReducer(state, action) {
         ...state,
         invalidRoom: true,
       };
-  
+    case "ERROR": 
+      return{
+        ...state, 
+        error: action.payload.message
+      }
     default:
       return state;
   }
