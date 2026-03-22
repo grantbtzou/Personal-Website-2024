@@ -10,6 +10,7 @@ export const initialGameState = {
     playerOrder: null,
     playerSelection: null,
     gameStatus: null,
+    moveConfirmed: false,
   },
   chat: {
     messages: [],

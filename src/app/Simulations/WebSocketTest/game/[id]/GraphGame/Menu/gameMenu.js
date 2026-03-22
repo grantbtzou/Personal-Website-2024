@@ -5,11 +5,10 @@ function GameMenu(){
   const { dispatch, state, connect } = useSocket();
   const ws = connect()
   const playerSelection = state.match.playerSelection;
-  console.log("playerSelection: " + playerSelection);
   const gameStatus = state.match.gameStatus;
+  const confirmation = state.match.moveConfirmed;
+  console.log("confirmation: ", confirmation);
   function setPlayerSelection(selection) {
-    console.log("Attempting to set player selection to: ", selection);
-    console.log("Current game status: ", gameStatus);
     if(gameStatus !== 'IN_PROGRESS'){
       return;
     }
@@ -24,7 +23,6 @@ function GameMenu(){
     ws.send(JSON.stringify({
       type: "CONFIRM_SELECTION",
       roomId: state.connection.connectedRoom, 
-    
     }))
     
   }
@@ -42,10 +40,17 @@ function GameMenu(){
           Defend
         </button>
       </div>
-      <button className="border p-4"
-      onClick={() => selectConfirm()}>
-        Confirm
-      </button>
+      {confirmation ? 
+       <button className={`border p-4 bg-green-300`}
+          onClick={() => selectConfirm()}>
+          Unconfirm
+        </button> : 
+        <button className={`border p-4`}
+          onClick={() => selectConfirm()}>
+          Confirm
+        </button> 
+      }
+     
     </div>
 
     <div>

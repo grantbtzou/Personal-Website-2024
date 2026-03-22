@@ -13,11 +13,22 @@ export function matchReducer(state, action){
         ...state, 
         gameStatus: "IN_PROGRESS"
       };
-     case "SELECTION_SET":
+    case "SELECTION_SET":
       return{
         ...state, 
         playerSelection: action.payload.selection,
       };
+    case "CONFIRMATION_SET":
+      console.log("received confirmation: ", action.payload.confirmation);
+      return{
+        ...state,
+        moveConfirmed: action.payload.confirmation,
+      }
+    case "BOTH_CONFIRMED":
+      return{
+        ...state, 
+        confirmation: false,
+      }
     default: 
       return state;
   }
