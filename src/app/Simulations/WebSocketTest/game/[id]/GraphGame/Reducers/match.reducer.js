@@ -27,7 +27,7 @@ export function matchReducer(state, action){
     case "BOTH_CONFIRMED":
       return{
         ...state, 
-        confirmation: false,
+        moveConfirmed: false,
       }
     default: 
       return state;
