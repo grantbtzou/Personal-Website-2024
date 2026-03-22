@@ -4,7 +4,6 @@ export function gameStateReducer(state, action) {
     case "GAME_CREATED":
     case "SUCCESSFUL_CONNECTION":
     case "RECONNECT_SUCCESS":
-      console.log("state.game:", state.game);
       return {
         ...state, 
         nodes: action.payload.nodes, 
@@ -18,50 +17,49 @@ export function gameStateReducer(state, action) {
         edges: action.payload.edges,
       };
     case "ATTACK_CHANGE":
-      console.log("state.game:", state.game);
       return {
         ...state,
-        game: {
-          ...state.game,
-          nodes: state.game.nodes.map((node) =>
-            node.id === action.payload.differences.attack
+          nodes: state.nodes.map((node) =>
+            node.id === action.payload.attackDifference
               ? 
               { ...node, 
+              data:{ 
+                ...node.data,
                 interactions: 
-                { ...node.interactions, 
-                  [state.match.playerOrder]:
-                   { ...node.interactions[state.match.playerOrder], intent: 'attack' } 
-                } 
-              }
+                { ...node.data.interactions, 
+                  [action.payload.playerOrder]:
+                  { ...node.data.interactions[action.payload.playerOrder], intent: 'attack' } 
+              } 
+              },
+            }
               : node
           ),
-        },
         differences: {
-          ...differences,
-          attack: action.payload.differences.attack,
+          ...state.differences,
+          attack: action.payload.attackDifference,
         },
       }; 
     case "DEFEND_CHANGE":
       return {
         ...state,
-        game: {
-          ...state.game,
-          nodes: state.game.nodes.map((node) =>
-            node.id === action.payload.differences.defend
-              ? 
-              { ...node, 
+        nodes: state.nodes.map((node) =>
+          node.id === action.payload.defendDifference
+            ? 
+            { ...node, 
+              data:{ 
+                ...node.data,
                 interactions: 
-                { ...node.interactions, 
-                  [state.match.playerOrder]:
-                   { ...node.interactions[state.match.playerOrder], intent: 'defend' } 
-                } 
-              }
-              : node
-          ),
-        },
+                { ...node.data.interactions, 
+                  [action.payload.playerOrder]:
+                  { ...node.data.interactions[action.payload.playerOrder], intent: 'defend' } 
+              } 
+              },
+            }
+            : node
+        ),
         differences: {
-          ...differences,
-          defend: action.payload.differences.defend,
+          ...state.differences,
+          defend: action.payload.defendDifference,
         },
       };
     default:
