@@ -17,5 +17,11 @@ export const initialGameState = {
   game: {
     nodes: [],
     edges: [],
+    differences: {
+      attack: null,
+      defend: null, 
+      createEdge: null,
+      deleteEdge: null,
+    }
   },
 };

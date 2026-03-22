@@ -1,7 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovider';
 
-function GameNode({ id, data = {} }) {
+function LaneNode({ id, data = {} }) {
 const { state, dispatch, } = useSocket();
 const intent = data.interactions?.[state.connection.playerOrder]?.intent;
   return (
@@ -34,4 +34,4 @@ const intent = data.interactions?.[state.connection.playerOrder]?.intent;
   );
 }
 
-export default GameNode;
+export default LaneNode;

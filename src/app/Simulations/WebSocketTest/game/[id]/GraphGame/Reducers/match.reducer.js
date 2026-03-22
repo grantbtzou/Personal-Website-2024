@@ -6,13 +6,18 @@ export function matchReducer(state, action){
       return{
         ...state,  
         playerSelection: action.payload.playerSelection,
-        gameStatus: action.payload.gameStatus,
-      }
+        gameStatus: action.payload.status,
+      };
     case "GAME_START":
       return {
         ...state, 
         gameStatus: "IN_PROGRESS"
-      }
+      };
+     case "SELECTION_SET":
+      return{
+        ...state, 
+        playerSelection: action.payload.selection,
+      };
     default: 
       return state;
   }

@@ -2,7 +2,7 @@ import Chat from "./Chat/chat"
 import { useEffect, useState, useCallback } from "react"
 import { useSocket } from "../../../Socket/websocketprovider";
 import { ReactFlow } from "@xyflow/react";
-import GameNode from "./GameComponents/gameNode";
+import LaneNode from "./GameComponents/laneNode";
 import BaseNode from "./GameComponents/baseNode";
 import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
@@ -30,9 +30,10 @@ export default function GraphGame( { roomId }){
   useEffect(() => {
     setEdges(state.game.edges);
   }, [state.game.edges]);
-  const [playerSelection, setplayerSelection] = useState(state.connection.playerSelection);
+  const playerSelection = state.match.playerSelection;
+  console.log("player selection in graphGame: " + playerSelection);
   const nodeTypes = {
-    gameNode: GameNode,
+    laneNode: LaneNode,
     baseNode: BaseNode
   }
 
@@ -61,6 +62,7 @@ export default function GraphGame( { roomId }){
 
   const onNodeClick = useCallback((_, clickedNode) => {
     console.log(clickedNode);
+    console.log("Player selection: ", playerSelection);
     if(playerSelection === 'attack'){
       send({  
         type: "SET_ATTACK", 
@@ -75,7 +77,7 @@ export default function GraphGame( { roomId }){
         node: clickedNode,
       })
     }
-  }, [nodes]);
+  }, [nodes, playerSelection]);
   
   return(
   <div>

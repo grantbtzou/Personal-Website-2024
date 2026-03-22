@@ -6,8 +6,10 @@ function GameMenu(){
   const ws = connect()
   const playerSelection = state.match.playerSelection;
   console.log("playerSelection: " + playerSelection);
-  const gameStatus = state.connection.gameStatus;
+  const gameStatus = state.match.gameStatus;
   function setPlayerSelection(selection) {
+    console.log("Attempting to set player selection to: ", selection);
+    console.log("Current game status: ", gameStatus);
     if(gameStatus !== 'IN_PROGRESS'){
       return;
     }
