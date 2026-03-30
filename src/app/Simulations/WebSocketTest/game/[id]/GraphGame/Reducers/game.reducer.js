@@ -15,7 +15,6 @@ export function gameStateReducer(state, action) {
         ...state,
         nodes: action.payload.nodes,
         edges: action.payload.edges,
-        
       };
     case "ATTACK_CHANGE":
       return {

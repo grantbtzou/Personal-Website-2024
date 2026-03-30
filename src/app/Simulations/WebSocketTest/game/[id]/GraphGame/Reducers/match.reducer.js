@@ -13,6 +13,11 @@ export function matchReducer(state, action){
         ...state, 
         gameStatus: "IN_PROGRESS"
       };
+    case "GAME_STATE_UPDATE":
+      return {
+        ...state,
+        log: [...(state.log ?? []), action.payload.turnLog],
+      };
     case "SELECTION_SET":
       return{
         ...state, 
