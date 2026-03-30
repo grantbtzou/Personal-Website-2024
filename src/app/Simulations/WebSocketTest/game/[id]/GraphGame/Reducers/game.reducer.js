@@ -10,11 +10,12 @@ export function gameStateReducer(state, action) {
         edges: action.payload.edges, 
       
       };
-    case "GAME_STATE":
+    case "GAME_STATE_UPDATE":
       return {
         ...state,
         nodes: action.payload.nodes,
         edges: action.payload.edges,
+        
       };
     case "ATTACK_CHANGE":
       return {
@@ -62,6 +63,32 @@ export function gameStateReducer(state, action) {
           defend: action.payload.defendDifference,
         },
       };
+    case "BOTH_CONFIRMED":
+      return{
+        ...state, 
+        nodes: state.nodes.map((node) =>
+          node.id === state.differences.attack || node.id === state.differences.defend
+            ? 
+            { ...node, 
+              data:{ 
+                ...node.data,
+                interactions: 
+                { ...node.data.interactions, 
+                  player1:
+                  { ...node.data.interactions.player1, intent: null },
+                  player2: 
+                  { ...node.data.interactions.player2, intent: null },
+              } 
+              },
+            }
+            : node
+        ),
+        differences: {
+          ...state.differences,
+          attack: null,
+          defend: null,
+        },
+      }
     default:
       return state;
   }

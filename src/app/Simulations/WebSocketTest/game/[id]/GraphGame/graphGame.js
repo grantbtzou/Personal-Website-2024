@@ -7,6 +7,7 @@ import BaseNode from "./GameComponents/baseNode";
 import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/gameMenu";
+import GameLog from "./GameLog/gameLog";
 export default function GraphGame( { roomId }){
   const { connect,send, state } = useSocket();
   useEffect(() => {
@@ -100,6 +101,9 @@ export default function GraphGame( { roomId }){
         zoomOnDoubleClick={false}
         fitView
       />
+      <div>
+        <GameLog/>
+      </div>
       <div className="flex-col">
         <GameMenu/>
         <Chat/>
