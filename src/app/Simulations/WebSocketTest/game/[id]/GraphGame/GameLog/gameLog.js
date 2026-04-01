@@ -11,8 +11,8 @@ function GameLog(){
         const player2Attack = attacks.find(attack => attack.attacker === 'player2');
         return( <div key={index} className="border p-2 my-2">
           <p>Turn {logEntry.turnNumber}:</p>
-          <p>Player 1 Attack: {player1Attack.targetId}</p>
-          <p>Player 2 Attack: {player2Attack.targetId}</p>
+          <p className="whitespace-nowrap">Player 1 Attack: {player1Attack.targetId}</p>
+          <p className="whitespace-nowrap">Player 2 Attack: {player2Attack.targetId}</p>
         </div>)
        
       }
