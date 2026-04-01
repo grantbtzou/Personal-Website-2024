@@ -4,6 +4,7 @@ import { useSocket } from "../../../Socket/websocketprovider";
 import { ReactFlow } from "@xyflow/react";
 import LaneNode from "./GameComponents/laneNode";
 import BaseNode from "./GameComponents/baseNode";
+import LabelNode from "./GameComponents/labelNode";
 import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/gameMenu";
@@ -24,18 +25,16 @@ export default function GraphGame( { roomId }){
   const [edges, setEdges] = useState(state.game.edges);
   useEffect(() => {
     setNodes(state.game.nodes);
-    console.log("nodes changed"); 
-    console.log(JSON.stringify(nodes));
   }, [state.game.nodes]);
 
   useEffect(() => {
     setEdges(state.game.edges);
   }, [state.game.edges]);
   const playerSelection = state.match.playerSelection;
-  console.log("player selection in graphGame: " + playerSelection);
   const nodeTypes = {
     laneNode: LaneNode,
-    baseNode: BaseNode
+    baseNode: BaseNode,
+    labelNode: LabelNode,
   }
 
   const onNodesChange = useCallback(
@@ -62,8 +61,6 @@ export default function GraphGame( { roomId }){
   const isValidConnection = useCallback((connection) => {})
 
   const onNodeClick = useCallback((_, clickedNode) => {
-    console.log(clickedNode);
-    console.log("Player selection: ", playerSelection);
     if(playerSelection === 'attack'){
       send({  
         type: "SET_ATTACK", 

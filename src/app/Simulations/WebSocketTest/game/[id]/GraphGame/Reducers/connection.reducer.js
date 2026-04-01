@@ -3,7 +3,6 @@ export function connectionReducer(state, action) {
     case "GAME_CREATED":
     case "SUCCESSFUL_CONNECTION":
     case "RECONNECT_SUCCESS":
-      console.log(action.payload.playerOrder)
       return {
         ...state,
         invalidRoom: false,

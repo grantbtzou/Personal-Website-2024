@@ -7,6 +7,8 @@ export function matchReducer(state, action){
         ...state,  
         playerSelection: action.payload.playerSelection,
         gameStatus: action.payload.status,
+        playerOrder: action.payload.playerOrder,
+        log: action.payload.log,
       };
     case "GAME_START":
       return {
@@ -24,7 +26,6 @@ export function matchReducer(state, action){
         playerSelection: action.payload.selection,
       };
     case "CONFIRMATION_SET":
-      console.log("received confirmation: ", action.payload.confirmation);
       return{
         ...state,
         moveConfirmed: action.payload.confirmation,

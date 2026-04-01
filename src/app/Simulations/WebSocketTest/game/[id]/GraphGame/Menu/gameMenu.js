@@ -7,7 +7,7 @@ function GameMenu(){
   const playerSelection = state.match.playerSelection;
   const gameStatus = state.match.gameStatus;
   const confirmation = state.match.moveConfirmed;
-  console.log("confirmation: ", confirmation);
+  const playerOrder = state.match.playerOrder;
   function setPlayerSelection(selection) {
     if(gameStatus !== 'IN_PROGRESS'){
       return;
@@ -19,7 +19,6 @@ function GameMenu(){
     }))
   }
   function selectConfirm(){
-    setConfirmed(!confirmed);
     ws.send(JSON.stringify({
       type: "CONFIRM_SELECTION",
       roomId: state.connection.connectedRoom, 
@@ -28,8 +27,8 @@ function GameMenu(){
   }
   return(
   <div>
-    <div className={`border p-4`}>
-      <div>Player 1</div> 
+    <div className={`border p-4 ${playerOrder === 'player1' ? 'bg-red-500' : 'bg-blue-500'}`}>
+      <div>{playerOrder}</div> 
       <div className="border p-4">
         <button className={`border p-4 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
         onClick={() => {setPlayerSelection("attack"); }}>
