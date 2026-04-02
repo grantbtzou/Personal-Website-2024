@@ -20,7 +20,6 @@ export default function Page({ params }){
     }
   })
   return(<div>
-    Page {id}
     <GraphGame roomId={id}/>
   </div>)
 }

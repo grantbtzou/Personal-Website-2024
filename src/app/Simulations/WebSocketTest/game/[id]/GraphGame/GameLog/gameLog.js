@@ -2,7 +2,7 @@ import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovi
 function GameLog(){
   const { state } = useSocket();
   return(
-    <div className="border p-4">
+    <div className="border p-4 w-48">
       <h2>Game Log</h2>
       {console.log("game log: ", state.match.log)}
       {state.match.log.map((logEntry, index) => {

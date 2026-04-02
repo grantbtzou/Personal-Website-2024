@@ -79,8 +79,7 @@ export default function GraphGame( { roomId }){
   
   return(
   <div>
-
-    <div className="mx-auto h-[500px] border-2 flex flex-1 flex-row" >
+    <div className="mx-auto mt-12 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
         nodes={nodes}
         edges={edges}

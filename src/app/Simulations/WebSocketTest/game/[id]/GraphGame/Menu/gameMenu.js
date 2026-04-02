@@ -28,23 +28,23 @@ function GameMenu(){
   return(
   <div>
     <div className={`border p-4 ${playerOrder === 'player1' ? 'bg-red-500' : 'bg-blue-500'}`}>
-      <div>{playerOrder}</div> 
-      <div className="border p-4">
-        <button className={`border p-4 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
+      <div className="text-white">{playerOrder}</div> 
+      <div className="">
+        <button className={`border p-4 w-24 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
         onClick={() => {setPlayerSelection("attack"); }}>
           Attack
         </button>
-        <button className={`border p-4 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
+        <button className={`border p-4 w-24 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
         onClick={() => {setPlayerSelection("defend"); }}>
           Defend
         </button>
       </div>
       {confirmation ? 
-       <button className={`border p-4 bg-green-300`}
+       <button className={`border p-4 bg-green-300 w-24`}
           onClick={() => selectConfirm()}>
           Unconfirm
         </button> : 
-        <button className={`border p-4`}
+        <button className={`border p-4 bg-white w-24`}
           onClick={() => selectConfirm()}>
           Confirm
         </button> 
