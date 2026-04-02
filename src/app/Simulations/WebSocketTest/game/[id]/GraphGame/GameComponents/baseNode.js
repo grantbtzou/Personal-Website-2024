@@ -4,7 +4,11 @@ import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovi
 
 function BaseNode({ id, data = {} }) {
 const { state, dispatch, } = useSocket();
-const intent = data.interactions?.[state.connection.playerOrder]?.intent;
+if(state.game.differences.attack === id){
+  var intent = 'attack';
+} else if(state.game.differences.defend === id){
+  var intent = 'defend';
+}
   return (
     <div className={`h-16 w-16 border-2 rounded-full ${
         intent === 'attack'

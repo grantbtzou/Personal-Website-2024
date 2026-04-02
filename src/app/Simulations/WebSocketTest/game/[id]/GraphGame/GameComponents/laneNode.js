@@ -3,7 +3,11 @@ import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovi
 
 function LaneNode({ id, data = {} }) {
 const { state, dispatch, } = useSocket();
-const intent = data.interactions?.[state.connection.playerOrder]?.intent;
+if(state.game.differences.attack === id){
+  var intent = 'attack';
+} else if(state.game.differences.defend === id){
+  var intent = 'defend';
+}
   return (
     <div className={`h-16 w-16 rounded-full border-2 ${
         intent === 'attack'
