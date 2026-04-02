@@ -1,5 +1,7 @@
 import { useSocket } from "../../../../Socket/websocketprovider";
 import { useState } from "react";
+import copyButton from "./copyButton";
+import CopyButton from "./copyButton";
 
 export default function Chat(){
   const { 
@@ -23,7 +25,12 @@ export default function Chat(){
   console.log("chat messages: ", state.chat.messages);
   return(<div>
     {state.connection.connectedRoom && <div className="w-96 mx-auto mb-24">
-    <h1>Connected room: {state.connection.connectedRoom}</h1>
+    <div className="flex gap-2">
+      <h1>Connected room: {state.connection.connectedRoom}</h1> 
+      <CopyButton text={state.connection.connectedRoom} />
+    </div>
+    
+
     <h1>Player id: {state.connection.playerId}</h1>
     <ul className="border-2">
       <ul>
