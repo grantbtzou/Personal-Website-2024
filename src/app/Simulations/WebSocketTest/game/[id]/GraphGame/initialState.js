@@ -12,6 +12,7 @@ export const initialGameState = {
     gameStatus: null,
     moveConfirmed: false,
     log: [],
+    winner: null,
   },
   chat: {
     messages: [],

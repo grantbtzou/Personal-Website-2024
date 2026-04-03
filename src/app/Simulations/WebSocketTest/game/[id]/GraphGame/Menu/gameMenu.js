@@ -1,13 +1,14 @@
 import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
-import { useState } from "react";
+import { useEffect } from "react";
+
 function GameMenu(){
-  const [confirmed, setConfirmed] = useState(false);
   const { dispatch, state, connect } = useSocket();
   const ws = connect()
   const playerSelection = state.match.playerSelection;
   const gameStatus = state.match.gameStatus;
   const confirmation = state.match.moveConfirmed;
   const playerOrder = state.match.playerOrder;
+  const winner = state.match.winner;
   function setPlayerSelection(selection) {
     if(gameStatus !== 'IN_PROGRESS'){
       return;
@@ -18,13 +19,43 @@ function GameMenu(){
       selection: selection,
     }))
   }
+
   function selectConfirm(){
     ws.send(JSON.stringify({
       type: "CONFIRM_SELECTION",
       roomId: state.connection.connectedRoom, 
     }))
-    
   }
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+
+        if (gameStatus !== 'IN_PROGRESS') return;
+
+        const next = playerSelection === 'attack' ? 'defend' : 'attack';
+        setPlayerSelection(next);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameStatus, playerSelection]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (gameStatus !== 'IN_PROGRESS') return;
+        selectConfirm();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [gameStatus, confirmation]);
+
   return(
   <div>
     <div className={`border p-4 ${playerOrder === 'player1' ? 'bg-red-500' : 'bg-blue-500'}`}>

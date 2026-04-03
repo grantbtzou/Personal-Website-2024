@@ -15,10 +15,17 @@ export function matchReducer(state, action){
         ...state, 
         gameStatus: "IN_PROGRESS"
       };
+    case "GAME_OVER":
+      return { 
+        ...state, 
+        gameStatus: "COMPLETE",
+        log: [...(state.log ?? []), action.payload.log],
+        winner: action.payload.winner,
+      }
     case "GAME_STATE_UPDATE":
       return {
         ...state,
-        log: [...(state.log ?? []), action.payload.turnLog],
+        log: [...(state.log ?? []), action.payload.log],
       };
     case "SELECTION_SET":
       return{
