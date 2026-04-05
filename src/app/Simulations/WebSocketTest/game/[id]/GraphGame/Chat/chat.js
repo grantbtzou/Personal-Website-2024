@@ -32,7 +32,7 @@ export default function Chat(){
     
 
     <h1>Player id: {state.connection.playerId}</h1>
-    <ul className="border-2">
+    <ul className="border-2 overflow-y-auto h-[250px]">
       <ul>
       {state.chat.messages.map((m, i) => {
         let label = "";
