@@ -21,15 +21,6 @@ export default function GraphGame( { roomId }){
     };
   }, []);
 
-  const [nodes, setNodes] = useState(state.game.nodes);
-  const [edges, setEdges] = useState(state.game.edges);
-  useEffect(() => {
-    setNodes(state.game.nodes);
-  }, [state.game.nodes]);
-
-  useEffect(() => {
-    setEdges(state.game.edges);
-  }, [state.game.edges]);
   const playerSelection = state.match.playerSelection;
   const nodeTypes = {
     laneNode: LaneNode,
@@ -75,14 +66,14 @@ export default function GraphGame( { roomId }){
         node: clickedNode,
       })
     }
-  }, [nodes, playerSelection]);
+  }, [state.game.nodes, playerSelection]);
   
   return(
   <div>
     <div className="mx-auto mt-12 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
-        nodes={nodes}
-        edges={edges}
+        nodes={state.game.nodes}
+        edges={state.game.edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
