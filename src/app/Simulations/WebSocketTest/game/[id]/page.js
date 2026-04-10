@@ -8,7 +8,6 @@ export default function Page({ params }){
   const { state, dispatch, connect, send} = useSocket();
   useEffect(() => { 
     const reconnectToken = sessionStorage.getItem("reconnectToken");
-    console.log("reconnectToken: ", reconnectToken);
     if(reconnectToken){ 
       const ws = connect();
       ws.onopen = () => {

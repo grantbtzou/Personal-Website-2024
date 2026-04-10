@@ -26,7 +26,13 @@ export function matchReducer(state, action){
       return {
         ...state,
         log: [...(state.log.slice(0,-1) ?? []), action.payload.log, action.payload.nextTurn],
+        viewingTurn: state.viewingTurn+1,
       };
+    case "SET_VIEWING_TURN":
+      return{
+        ...state,
+        viewingTurn: action.payload.viewingTurn,
+      }
     case "SELECTION_SET":
       return{
         ...state, 

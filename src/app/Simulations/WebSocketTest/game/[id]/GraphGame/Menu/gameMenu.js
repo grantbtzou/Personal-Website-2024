@@ -1,5 +1,6 @@
 import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
 import { useEffect } from "react";
+import { PLAYER_COLORS } from "../constants";
 
 function GameMenu(){
   const { dispatch, state, connect } = useSocket();
@@ -61,11 +62,11 @@ function GameMenu(){
     <div className={`border p-4 ${playerOrder === 'player1' ? 'bg-red-500' : 'bg-blue-500'}`}>
       <div className="text-white">{playerOrder}</div> 
       <div className="">
-        <button className={`border p-4 w-24 ${playerSelection === 'attack' ? 'bg-green-500' : 'bg-white'}`} 
+        <button className={`border p-4 w-24 ${ playerSelection === 'attack' && PLAYER_COLORS[playerOrder].attack || 'bg-white'}`} 
         onClick={() => {setPlayerSelection("attack"); }}>
           Attack
         </button>
-        <button className={`border p-4 w-24 ${playerSelection === 'defend' ? 'bg-yellow-500' : 'bg-white'}`}
+        <button className={`border p-4 w-24 ${playerSelection === 'defend' && PLAYER_COLORS[playerOrder].defend || 'bg-white'}`}
         onClick={() => {setPlayerSelection("defend"); }}>
           Defend
         </button>

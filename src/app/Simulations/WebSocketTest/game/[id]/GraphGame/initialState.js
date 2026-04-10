@@ -13,6 +13,7 @@ export const initialGameState = {
     moveConfirmed: false,
     log: [],
     winner: null,
+    viewingTurn: 1,
   },
   chat: {
     messages: [],

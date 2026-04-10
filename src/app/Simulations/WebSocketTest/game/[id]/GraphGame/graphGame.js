@@ -1,11 +1,10 @@
 import Chat from "./Chat/chat"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useCallback } from "react"
 import { useSocket } from "../../../Socket/websocketprovider";
 import { ReactFlow } from "@xyflow/react";
 import LaneNode from "./GameComponents/laneNode";
 import BaseNode from "./GameComponents/baseNode";
 import LabelNode from "./GameComponents/labelNode";
-import { GameContext } from "./gameContext";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/gameMenu";
 import GameLog from "./GameLog/gameLog";
@@ -20,7 +19,11 @@ export default function GraphGame( { roomId }){
       }));
     };
   }, []);
-
+ 
+  const isReplaying = state.match.log.length > 0 && state.match.viewingTurn !== state.match.log.length;
+  console.log("is replaying: ", isReplaying);
+  console.log("rendering game with log length", state.match.log.length, "and viewing turn", state.match.viewingTurn)
+  console.log("current log: ", state.match.log);
   const playerSelection = state.match.playerSelection;
   const nodeTypes = {
     laneNode: LaneNode,
@@ -52,6 +55,9 @@ export default function GraphGame( { roomId }){
   const isValidConnection = useCallback((connection) => {})
 
   const onNodeClick = useCallback((_, clickedNode) => {
+    if(isReplaying){
+      return;
+    }
     if(playerSelection === 'attack'){
       send({  
         type: "SET_ATTACK", 
@@ -72,8 +78,8 @@ export default function GraphGame( { roomId }){
   <div>
     <div className="mx-auto mt-12 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
-        nodes={state.game.nodes}
-        edges={state.game.edges}
+        nodes={isReplaying ? state.match.log[state.match.viewingTurn-1].before.nodes : state.game.nodes}
+        edges={isReplaying ? state.match.log[state.match.viewingTurn-1].before.edges : state.game.edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}

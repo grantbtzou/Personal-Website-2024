@@ -22,7 +22,6 @@ export default function Chat(){
 
     setMessage("");
   };
-  console.log("chat messages: ", state.chat.messages);
   return(<div>
     {state.connection.connectedRoom && <div className="w-96 mx-auto mb-24">
     <div className="flex gap-2">
