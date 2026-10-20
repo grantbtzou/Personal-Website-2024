@@ -1,6 +1,7 @@
-import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
+import { useGameActions, useGameState } from "../gameProvider";
 function GameLog(){
-  const { state, dispatch } = useSocket();
+  const state = useGameState();
+  const { dispatch } = useGameActions();
 
   const handleTurnClick = (index) => {
     dispatch({ type: 'SET_VIEWING_TURN', payload: { viewingTurn: index + 1 }});

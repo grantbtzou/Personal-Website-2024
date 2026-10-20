@@ -1,8 +1,12 @@
 import { useSocket } from "./Socket/websocketprovider";
+import { useGameActions, useGameState } from "./game/[id]/GraphGame/gameProvider";
 import { useState } from "react";
 
 export default function NewGame(){
-  const { state, dispatch, connect, send} = useSocket();
+  const state = useGameState();
+  const { send } = useGameActions();
+  const { status } = useSocket();
+  const disconnected = status !== "open";
   const [inputCode, setInputCode] = useState('');
   
   const createGame = () => {
@@ -18,9 +22,9 @@ export default function NewGame(){
 
   return(
   <div className="flex flex-col justify-start">
-    <button className="border-2 w-24" onClick={createGame}>Create Game</button>
+    <button className="border-2 w-24" onClick={createGame} disabled={disconnected}>Create Game</button>
     <div className="">
-      <button className="border-2" onClick={joinRoom}>Join Room</button>
+      <button className="border-2" onClick={joinRoom} disabled={disconnected}>Join Room</button>
       <input className="border-2"
       value={inputCode} 
       onChange={(e) => {

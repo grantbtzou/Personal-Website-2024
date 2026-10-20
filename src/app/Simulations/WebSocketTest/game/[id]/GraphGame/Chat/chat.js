@@ -1,19 +1,13 @@
-import { useSocket } from "../../../../Socket/websocketprovider";
+import { useGameActions, useGameState } from "../gameProvider";
 import { useState } from "react";
-import copyButton from "./copyButton";
 import CopyButton from "./copyButton";
 
 export default function Chat(){
-  const { 
-    connect, 
-    state, 
-    dispatch, 
-    send, 
-  } = useSocket();
+  const state = useGameState();
+  const { send } = useGameActions();
   const [message, setMessage] = useState('');
 
   const sendMessage = () => {
-    const ws = connect();
     send({
         type: "CHAT",
         text: message, 

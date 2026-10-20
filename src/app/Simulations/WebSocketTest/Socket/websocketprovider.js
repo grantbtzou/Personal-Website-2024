@@ -2,78 +2,100 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
+  useEffect,
+  useMemo,
   useRef,
   useState,
-  useEffect, 
-  useReducer, 
-  useCallback,
 } from "react";
-import { useRouter } from "next/navigation";
-import { initialGameState } from "../game/[id]/GraphGame/initialState";
-import { gameReducer } from "../game/[id]/GraphGame/gameReducer";
 
-const WebSocketContext = createContext(null);
+const SocketContext = createContext(null);
 
-export function WebSocketProvider({ children }) {
-  const router = useRouter();
+const MAX_RETRY_DELAY = 10000;
+
+// Owns the WebSocket connection only. It knows nothing about the game:
+// consumers send messages and subscribe to incoming ones.
+export function SocketProvider({ url, children }) {
   const socketRef = useRef(null);
+  const listenersRef = useRef(new Set());
+  const [status, setStatus] = useState("connecting");
+  // Increments on every successful open, so consumers can tell a new socket from the old one.
+  const [connectionId, setConnectionId] = useState(0);
 
-  const [state, dispatch] = useReducer(gameReducer, initialGameState);
   useEffect(() => {
-    if(state.connection.reconnectToken){ 
-      sessionStorage.setItem("reconnectToken", state.connection.reconnectToken);
+    let closedByUs = false;
+    let retryTimer = null;
+    let attempts = 0;
+
+    function open() {
+      const ws = new WebSocket(url);
+      socketRef.current = ws;
+      setStatus("connecting");
+
+      ws.onopen = () => {
+        attempts = 0;
+        setStatus("open");
+        setConnectionId((id) => id + 1);
+      };
+
+      ws.onmessage = (event) => {
+        let msg;
+        try {
+          msg = JSON.parse(event.data);
+        } catch {
+          console.warn("Ignoring non-JSON message", event.data);
+          return;
+        }
+        listenersRef.current.forEach((listener) => listener(msg));
+      };
+
+      ws.onclose = () => {
+        if (closedByUs) return;
+        socketRef.current = null;
+        setStatus("closed");
+        const delay = Math.min(1000 * 2 ** attempts, MAX_RETRY_DELAY);
+        attempts++;
+        retryTimer = setTimeout(open, delay);
+      };
     }
-  },[state.connection.reconnectToken])
-  function connect() {
-    if (socketRef.current) return socketRef.current;
 
-    const ws = new WebSocket("ws://localhost:8080");
-    socketRef.current = ws;
-
-    ws.onmessage = (event) => {
-      const msg = JSON.parse(event.data);
-      console.log(msg);
-      dispatch({
-        type: msg.type,
-        payload: msg,
-      });
-      
-      if (
-        (msg.type === "GAME_CREATED" || msg.type === "SUCCESSFUL_CONNECTION") &&
-        !window.location.pathname.includes(`/game/${msg.roomId}`)
-      ) {
-        router.push(`websockettest/game/${msg.roomId}`);
-      }
-
-      if (msg.type === "INVALID_ROOM") {
-        ws.close();
-      }
-    };
-
-    ws.onclose = () => {
+    open();
+    return () => {
+      closedByUs = true;
+      clearTimeout(retryTimer);
+      socketRef.current?.close();
       socketRef.current = null;
     };
+  }, [url]);
 
-    return ws;
-  }
-
+  // Messages sent while the socket is down are dropped rather than queued, so a stale
+  // move can't reach the server ahead of the RECONNECT handshake.
   const send = useCallback((message) => {
     const ws = socketRef.current;
-
-    if (ws.readyState !== WebSocket.OPEN){
-      console.warn("Websocket not open");
-    };
-
+    if (!ws || ws.readyState !== WebSocket.OPEN) {
+      console.warn("WebSocket not open, dropping message", message);
+      return false;
+    }
     ws.send(JSON.stringify(message));
+    return true;
   }, []);
-  useEffect(()=>{
-    connect();
-  })
+
+  const subscribe = useCallback((listener) => {
+    listenersRef.current.add(listener);
+    return () => listenersRef.current.delete(listener);
+  }, []);
+
+  const value = useMemo(
+    () => ({ status, connectionId, send, subscribe }),
+    [status, connectionId, send, subscribe]
+  );
+
   return (
-    <WebSocketContext.Provider value={{ state, dispatch, connect, send }}>
+    <SocketContext.Provider value={value}>
       {children}
-    </WebSocketContext.Provider>
+    </SocketContext.Provider>
   );
 }
-export const useSocket = () => useContext(WebSocketContext);
+
+export const useSocket = () => useContext(SocketContext);

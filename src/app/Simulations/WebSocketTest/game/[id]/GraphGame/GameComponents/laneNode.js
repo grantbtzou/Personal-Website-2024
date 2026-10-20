@@ -1,9 +1,9 @@
 import { Handle, Position } from '@xyflow/react';
-import { useSocket } from '@/app/Simulations/websockettest/Socket/websocketprovider'; 
+import { useGameState } from '../gameProvider';
 import { PLAYER_COLORS } from '../constants';
 
 function LaneNode({ id, data = {} }) {
-  const { state, dispatch, } = useSocket();
+  const state = useGameState();
 
   const viewingTurn = state.match.viewingTurn-1;
   const p1Selection = state.match.log[viewingTurn].selections.player1.attack === id ? 'attack'

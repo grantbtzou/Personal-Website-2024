@@ -1,10 +1,10 @@
-import { useSocket } from "@/app/Simulations/websockettest/Socket/websocketprovider";
+import { useGameActions, useGameState } from "../gameProvider";
 import { useEffect } from "react";
 import { PLAYER_COLORS } from "../constants";
 
 function GameMenu(){
-  const { dispatch, state, connect } = useSocket();
-  const ws = connect()
+  const state = useGameState();
+  const { send } = useGameActions();
   const playerSelection = state.match.playerSelection;
   const gameStatus = state.match.gameStatus;
   const confirmation = state.match.moveConfirmed;
@@ -14,18 +14,18 @@ function GameMenu(){
     if(gameStatus !== 'IN_PROGRESS'){
       return;
     }
-    ws.send(JSON.stringify({
+    send({
       type: "SET_SELECTION",
       roomId: state.connection.connectedRoom,
       selection: selection,
-    }))
+    })
   }
 
   function selectConfirm(){
-    ws.send(JSON.stringify({
+    send({
       type: "CONFIRM_SELECTION",
-      roomId: state.connection.connectedRoom, 
-    }))
+      roomId: state.connection.connectedRoom,
+    })
   }
 
   useEffect(() => {

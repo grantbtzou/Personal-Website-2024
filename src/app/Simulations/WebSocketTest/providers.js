@@ -1,10 +1,15 @@
 "use client";
 
-import { WebSocketProvider } from "./Socket/websocketprovider";
+import { SocketProvider } from "./Socket/websocketprovider";
+import { GameProvider } from "./game/[id]/GraphGame/gameProvider";
+
+const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:8080";
 
 export default function Providers({ children }) {
   return(
-  <WebSocketProvider>
-    {children}
-  </WebSocketProvider>);
+  <SocketProvider url={WS_URL}>
+    <GameProvider>
+      {children}
+    </GameProvider>
+  </SocketProvider>);
 }
