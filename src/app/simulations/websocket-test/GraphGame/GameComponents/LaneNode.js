@@ -1,6 +1,6 @@
 import { Handle, Position } from '@xyflow/react';
-import { useGameState } from '../gameProvider';
-import { PLAYER_COLORS } from '../constants';
+import { useGameState } from '@/app/simulations/websocket-test/GraphGame/gameProvider';
+import { PLAYER_COLORS } from '@/app/simulations/websocket-test/GraphGame/constants';
 
 function LaneNode({ id, data = {} }) {
   const state = useGameState();

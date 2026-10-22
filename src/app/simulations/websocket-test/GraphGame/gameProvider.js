@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "../Socket/websocketprovider";
+import { useSocket } from "@/app/simulations/websocket-test/Socket/websocketprovider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
 

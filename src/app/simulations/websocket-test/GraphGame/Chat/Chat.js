@@ -1,4 +1,4 @@
-import { useGameActions, useGameState } from "../gameProvider";
+import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useState } from "react";
 import CopyButton from "./CopyButton";
 

@@ -1,4 +1,4 @@
-import Project from "../components/Project"
+import Project from "@/app/components/Project"
 import { Roboto_Condensed } from "next/font/google"
 
 const rob_condensed = Roboto_Condensed({ subsets: ["latin"] });

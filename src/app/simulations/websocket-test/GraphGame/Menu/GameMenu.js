@@ -1,6 +1,6 @@
-import { useGameActions, useGameState } from "../gameProvider";
+import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useEffect } from "react";
-import { PLAYER_COLORS } from "../constants";
+import { PLAYER_COLORS } from "@/app/simulations/websocket-test/GraphGame/constants";
 
 function GameMenu(){
   const state = useGameState();
