@@ -1,15 +1,16 @@
 import { Handle, Position } from '@xyflow/react';
 import { useGameState } from '@/app/simulations/websocket-test/GraphGame/gameProvider';
 import { PLAYER_COLORS } from '@/app/simulations/websocket-test/GraphGame/constants';
+import { PLAYER, SELECTION } from '@/app/simulations/websocket-test/protocol';
 
 function BaseNode({ id, data = {} }) {
   const state = useGameState();
   const viewingTurn = state.match.viewingTurn-1;
-  const p1Selection = state.match.log[viewingTurn].selections.player1.attack === id ? 'attack'
-                    : state.match.log[viewingTurn].selections.player1.defend === id ? 'defend'
+  const p1Selection = state.match.log[viewingTurn].selections.player1.attack === id ? SELECTION.ATTACK
+                    : state.match.log[viewingTurn].selections.player1.defend === id ? SELECTION.DEFEND
                     : null;
-  const p2Selection = state.match.log[viewingTurn].selections.player2.attack === id ? 'attack'
-                    : state.match.log[viewingTurn].selections.player2.defend === id ? 'defend'
+  const p2Selection = state.match.log[viewingTurn].selections.player2.attack === id ? SELECTION.ATTACK
+                    : state.match.log[viewingTurn].selections.player2.defend === id ? SELECTION.DEFEND
                     : null;
   const bothSelected = p1Selection && p2Selection;
 
@@ -24,27 +25,27 @@ function BaseNode({ id, data = {} }) {
     <div className={`h-full w-full rounded-full ${PLAYER_COLORS.player2[p2Selection]}`} />
   ) : (
     <div className={`h-full w-full rounded-full ${
-      data.owner === 'player1' ? 'bg-red-500' :
-      data.owner === 'player2' ? 'bg-blue-500' : 'bg-white'
+      data.owner === PLAYER.ONE ? 'bg-red-500' :
+      data.owner === PLAYER.TWO ? 'bg-blue-500' : 'bg-white'
     }`} />
   );
   if(state.game.differences.attack === id){
-    var intent = 'attack';
+    var intent = SELECTION.ATTACK;
   } else if(state.game.differences.defend === id){
-    var intent = 'defend';
+    var intent = SELECTION.DEFEND;
   }
 
   return (
     <div className={`h-16 w-16 border-2 rounded-full ${
         intent && data.owner 
           ? PLAYER_COLORS[data.owner][intent]
-          : data.owner === 'player1'
+          : data.owner === PLAYER.ONE
           ? 'bg-red-500'
-          : data.owner === 'player2'
+          : data.owner === PLAYER.TWO
           ? 'bg-blue-500'
           : 'bg-white'
       }`}>
-       {data.baseOwner === 'player2' && (
+       {data.baseOwner === PLAYER.TWO && (
         <Handle
         id = 'top'
         type="target"
@@ -52,7 +53,7 @@ function BaseNode({ id, data = {} }) {
       />)}
        {(viewingTurn !== state.match.log.length-1) && nodeContent}
       <div>{}</div>
-        {data.baseOwner === 'player1' && (
+        {data.baseOwner === PLAYER.ONE && (
         <Handle
         id = 'bot'
         type="source"

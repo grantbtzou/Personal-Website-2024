@@ -1,19 +1,20 @@
+import { SERVER_MSG } from "@/app/simulations/websocket-test/protocol";
 export function chatReducer(state, action){
   switch(action.type){
-    case "GAME_CREATED":
-    case "SUCCESSFUL_CONNECTION":
-    case "RECONNECT_SUCCESS":
+    case SERVER_MSG.GAME_CREATED:
+    case SERVER_MSG.SUCCESSFUL_CONNECTION:
+    case SERVER_MSG.RECONNECT_SUCCESS:
       return{
         ...state, 
         messages: action.payload.messages,
       }
-    case "CHAT":
+    case SERVER_MSG.CHAT:
       return {
         ...state,
         messages: [...state.messages, action.payload.message],
       };
 
-    case "CHAT_INIT":
+    case SERVER_MSG.CHAT_INIT:
       return {
         ...state,
         messages: action.payload.messages,

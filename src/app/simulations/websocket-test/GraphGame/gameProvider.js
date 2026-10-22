@@ -13,12 +13,13 @@ import { useRouter } from "next/navigation";
 import { useSocket } from "@/app/simulations/websocket-test/Socket/websocketprovider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
+import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/websocket-test/protocol";
+import { SOCKET_STATUS } from "@/app/simulations/websocket-test/Socket/constants";
 
 const GameStateContext = createContext(null);
 const GameActionsContext = createContext(null);
 
 const GAME_PATH = "/simulations/websocket-test/game";
-const JOINED_TYPES = ["GAME_CREATED", "SUCCESSFUL_CONNECTION", "RECONNECT_SUCCESS"];
 const RECONNECT_KEY = "reconnect";
 
 // The server's reconnect token is tied to one room, so the room is stored next to it.
@@ -55,23 +56,23 @@ export function GameProvider({ children }) {
   const handshakeRef = useRef(null);
 
   useEffect(() => subscribe((msg) => {
-    if (JOINED_TYPES.includes(msg.type)) {
+    if (JOINED_MSGS.includes(msg.type)) {
       joinedOnRef.current = connectionIdRef.current;
     }
     if (msg.reconnectToken) {
       saveReconnect({ token: msg.reconnectToken, roomId: msg.roomId });
     }
-    if (msg.type === "RECONNECT_FAILED") {
+    if (msg.type === SERVER_MSG.RECONNECT_FAILED) {
       saveReconnect(null);
       if (targetRoomRef.current) {
-        send({ type: "JOIN_GAME", roomId: targetRoomRef.current });
+        send({ type: CLIENT_MSG.JOIN_GAME, roomId: targetRoomRef.current });
       }
     }
 
     dispatch({ type: msg.type, payload: msg });
 
     if (
-      (msg.type === "GAME_CREATED" || msg.type === "SUCCESSFUL_CONNECTION") &&
+      (msg.type === SERVER_MSG.GAME_CREATED || msg.type === SERVER_MSG.SUCCESSFUL_CONNECTION) &&
       !window.location.pathname.includes(`/game/${msg.roomId}`)
     ) {
       router.push(`${GAME_PATH}/${msg.roomId}`);
@@ -81,7 +82,7 @@ export function GameProvider({ children }) {
   // Join (or rejoin) the target room whenever a new socket opens or the target changes.
   const connectedRoom = state.connection.connectedRoom;
   useEffect(() => {
-    if (status !== "open" || !targetRoom) return;
+    if (status !== SOCKET_STATUS.OPEN || !targetRoom) return;
     if (connectedRoom === targetRoom && joinedOnRef.current === connectionId) return;
 
     const key = `${connectionId}:${targetRoom}`;
@@ -90,8 +91,8 @@ export function GameProvider({ children }) {
 
     const saved = loadReconnect();
     send(saved?.roomId === targetRoom
-      ? { type: "RECONNECT", reconnectToken: saved.token }
-      : { type: "JOIN_GAME", roomId: targetRoom });
+      ? { type: CLIENT_MSG.RECONNECT, reconnectToken: saved.token }
+      : { type: CLIENT_MSG.JOIN_GAME, roomId: targetRoom });
   }, [status, connectionId, targetRoom, connectedRoom, send]);
 
   const actions = useMemo(

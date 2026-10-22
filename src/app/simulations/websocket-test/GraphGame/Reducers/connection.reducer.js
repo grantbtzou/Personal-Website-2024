@@ -1,8 +1,9 @@
+import { SERVER_MSG } from "@/app/simulations/websocket-test/protocol";
 export function connectionReducer(state, action) {
   switch (action.type) {
-    case "GAME_CREATED":
-    case "SUCCESSFUL_CONNECTION":
-    case "RECONNECT_SUCCESS":
+    case SERVER_MSG.GAME_CREATED:
+    case SERVER_MSG.SUCCESSFUL_CONNECTION:
+    case SERVER_MSG.RECONNECT_SUCCESS:
       return {
         ...state,
         invalidRoom: false,
@@ -12,12 +13,12 @@ export function connectionReducer(state, action) {
         reconnectToken: action.payload.reconnectToken,
       };
     
-    case "INVALID_ROOM":
+    case SERVER_MSG.INVALID_ROOM:
       return {
         ...state,
         invalidRoom: true,
       };
-    case "ERROR": 
+    case SERVER_MSG.ERROR: 
       return{
         ...state, 
         error: action.payload.message

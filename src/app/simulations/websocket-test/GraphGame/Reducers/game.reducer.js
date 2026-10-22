@@ -1,22 +1,23 @@
 import { applyNodeChanges } from '@xyflow/react';
+import { SERVER_MSG, SELECTION } from '@/app/simulations/websocket-test/protocol';
 export function gameStateReducer(state, action) {
   switch (action.type) {
-    case "GAME_CREATED":
-    case "SUCCESSFUL_CONNECTION":
-    case "RECONNECT_SUCCESS":
+    case SERVER_MSG.GAME_CREATED:
+    case SERVER_MSG.SUCCESSFUL_CONNECTION:
+    case SERVER_MSG.RECONNECT_SUCCESS:
       return {
         ...state, 
         nodes: action.payload.nodes, 
         edges: action.payload.edges, 
       
       };
-    case "GAME_STATE_UPDATE":
+    case SERVER_MSG.GAME_STATE_UPDATE:
       return {
         ...state,
         nodes: action.payload.nodes,
         edges: action.payload.edges,
       };
-    case "ATTACK_CHANGE":
+    case SERVER_MSG.ATTACK_CHANGE:
       return {
         ...state,
           nodes: state.nodes.map((node) =>
@@ -28,7 +29,7 @@ export function gameStateReducer(state, action) {
                 interactions: 
                 { ...node.data.interactions, 
                   [action.payload.playerOrder]:
-                  { ...node.data.interactions[action.payload.playerOrder], intent: 'attack' } 
+                  { ...node.data.interactions[action.payload.playerOrder], intent: SELECTION.ATTACK } 
               } 
               },
             }
@@ -39,7 +40,7 @@ export function gameStateReducer(state, action) {
           attack: action.payload.attackDifference,
         },
       }; 
-    case "DEFEND_CHANGE":
+    case SERVER_MSG.DEFEND_CHANGE:
       return {
         ...state,
         nodes: state.nodes.map((node) =>
@@ -51,7 +52,7 @@ export function gameStateReducer(state, action) {
                 interactions: 
                 { ...node.data.interactions, 
                   [action.payload.playerOrder]:
-                  { ...node.data.interactions[action.payload.playerOrder], intent: 'defend' } 
+                  { ...node.data.interactions[action.payload.playerOrder], intent: SELECTION.DEFEND } 
               } 
               },
             }
@@ -62,7 +63,7 @@ export function gameStateReducer(state, action) {
           defend: action.payload.defendDifference,
         },
       };
-    case "BOTH_CONFIRMED":
+    case SERVER_MSG.BOTH_CONFIRMED:
       return{
         ...state, 
         nodes: state.nodes.map((node) =>

@@ -1,21 +1,23 @@
 import { useSocket } from "./Socket/websocketprovider";
 import { useGameActions, useGameState } from "./GraphGame/gameProvider";
 import { useState } from "react";
+import { CLIENT_MSG } from "@/app/simulations/websocket-test/protocol";
+import { SOCKET_STATUS } from "@/app/simulations/websocket-test/Socket/constants";
 
 export default function NewGame(){
   const state = useGameState();
   const { send } = useGameActions();
   const { status } = useSocket();
-  const disconnected = status !== "open";
+  const disconnected = status !== SOCKET_STATUS.OPEN;
   const [inputCode, setInputCode] = useState('');
   
   const createGame = () => {
-    send({ type: "CREATE_GAME" })
+    send({ type: CLIENT_MSG.CREATE_GAME })
   };
 
   const joinRoom = () => {
     send({
-      type: "JOIN_GAME",
+      type: CLIENT_MSG.JOIN_GAME,
       roomId: inputCode,
     });
   };

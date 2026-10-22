@@ -1,6 +1,7 @@
 import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useState } from "react";
 import CopyButton from "./CopyButton";
+import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/websocket-test/protocol";
 
 export default function Chat(){
   const state = useGameState();
@@ -9,7 +10,7 @@ export default function Chat(){
 
   const sendMessage = () => {
     send({
-        type: "CHAT",
+        type: CLIENT_MSG.CHAT,
         text: message, 
         roomId: state.connection.connectedRoom
     })
@@ -30,11 +31,11 @@ export default function Chat(){
       {state.chat.messages.map((m, i) => {
         let label = "";
 
-        if (m.userType === "player") label = `Player ${m.user}: `;
-        if (m.userType === "spectator") label = `Spectator ${m.user}: `;
+        if (m.userType === USER_TYPE.PLAYER) label = `Player ${m.user}: `;
+        if (m.userType === USER_TYPE.SPECTATOR) label = `Spectator ${m.user}: `;
 
         return (
-          <li key={i} className={m.userType === "system" ? "system-message" : ""}>
+          <li key={i} className={m.userType === USER_TYPE.SYSTEM ? "system-message" : ""}>
             {label && <strong>{label}</strong>}
             {m.text}{" "}
             {new Date(m.timestamp).toLocaleTimeString([], {

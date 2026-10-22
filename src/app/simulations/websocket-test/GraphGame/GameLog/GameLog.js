@@ -1,10 +1,11 @@
 import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
+import { LOCAL_ACTION } from "@/app/simulations/websocket-test/GraphGame/constants";
 function GameLog(){
   const state = useGameState();
   const { dispatch } = useGameActions();
 
   const handleTurnClick = (index) => {
-    dispatch({ type: 'SET_VIEWING_TURN', payload: { viewingTurn: index + 1 }});
+    dispatch({ type: LOCAL_ACTION.SET_VIEWING_TURN, payload: { viewingTurn: index + 1 }});
   };
 
   return (

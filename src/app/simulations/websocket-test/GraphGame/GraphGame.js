@@ -8,6 +8,7 @@ import LabelNode from "./GameComponents/LabelNode";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
+import { CLIENT_MSG, SELECTION } from "@/app/simulations/websocket-test/protocol";
 export default function GraphGame( { roomId }){
   const state = useGameState();
   const { send } = useGameActions();
@@ -50,16 +51,16 @@ export default function GraphGame( { roomId }){
     if(isReplaying){
       return;
     }
-    if(playerSelection === 'attack'){
+    if(playerSelection === SELECTION.ATTACK){
       send({  
-        type: "SET_ATTACK", 
+        type: CLIENT_MSG.SET_ATTACK, 
         roomId: roomId,
         node: clickedNode,
       })
     }
-    if(playerSelection === 'defend'){
+    if(playerSelection === SELECTION.DEFEND){
       send({
-        type: "SET_DEFEND",
+        type: CLIENT_MSG.SET_DEFEND,
         roomId: roomId,
         node: clickedNode,
       })

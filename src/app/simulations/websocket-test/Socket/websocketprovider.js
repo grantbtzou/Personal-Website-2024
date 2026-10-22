@@ -9,6 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { SOCKET_STATUS } from "./constants";
 
 const SocketContext = createContext(null);
 
@@ -19,7 +20,7 @@ const MAX_RETRY_DELAY = 10000;
 export function SocketProvider({ url, children }) {
   const socketRef = useRef(null);
   const listenersRef = useRef(new Set());
-  const [status, setStatus] = useState("connecting");
+  const [status, setStatus] = useState(SOCKET_STATUS.CONNECTING);
   // Increments on every successful open, so consumers can tell a new socket from the old one.
   const [connectionId, setConnectionId] = useState(0);
 
@@ -31,11 +32,11 @@ export function SocketProvider({ url, children }) {
     function open() {
       const ws = new WebSocket(url);
       socketRef.current = ws;
-      setStatus("connecting");
+      setStatus(SOCKET_STATUS.CONNECTING);
 
       ws.onopen = () => {
         attempts = 0;
-        setStatus("open");
+        setStatus(SOCKET_STATUS.OPEN);
         setConnectionId((id) => id + 1);
       };
 
@@ -53,7 +54,7 @@ export function SocketProvider({ url, children }) {
       ws.onclose = () => {
         if (closedByUs) return;
         socketRef.current = null;
-        setStatus("closed");
+        setStatus(SOCKET_STATUS.CLOSED);
         const delay = Math.min(1000 * 2 ** attempts, MAX_RETRY_DELAY);
         attempts++;
         retryTimer = setTimeout(open, delay);

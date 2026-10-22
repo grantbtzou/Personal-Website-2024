@@ -1,6 +1,7 @@
 import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useEffect } from "react";
 import { PLAYER_COLORS } from "@/app/simulations/websocket-test/GraphGame/constants";
+import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/websocket-test/protocol";
 
 function GameMenu(){
   const state = useGameState();
@@ -11,11 +12,11 @@ function GameMenu(){
   const playerOrder = state.match.playerOrder;
   const winner = state.match.winner;
   function setPlayerSelection(selection) {
-    if(gameStatus !== 'IN_PROGRESS'){
+    if(gameStatus !== GAME_STATUS.IN_PROGRESS){
       return;
     }
     send({
-      type: "SET_SELECTION",
+      type: CLIENT_MSG.SET_SELECTION,
       roomId: state.connection.connectedRoom,
       selection: selection,
     })
@@ -23,7 +24,7 @@ function GameMenu(){
 
   function selectConfirm(){
     send({
-      type: "CONFIRM_SELECTION",
+      type: CLIENT_MSG.CONFIRM_SELECTION,
       roomId: state.connection.connectedRoom,
     })
   }
@@ -33,9 +34,9 @@ function GameMenu(){
       if (e.key === 'Tab') {
         e.preventDefault();
 
-        if (gameStatus !== 'IN_PROGRESS') return;
+        if (gameStatus !== GAME_STATUS.IN_PROGRESS) return;
 
-        const next = playerSelection === 'attack' ? 'defend' : 'attack';
+        const next = playerSelection === SELECTION.ATTACK ? SELECTION.DEFEND : SELECTION.ATTACK;
         setPlayerSelection(next);
       }
     };
@@ -48,7 +49,7 @@ function GameMenu(){
     const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        if (gameStatus !== 'IN_PROGRESS') return;
+        if (gameStatus !== GAME_STATUS.IN_PROGRESS) return;
         selectConfirm();
       }
     };
@@ -59,15 +60,15 @@ function GameMenu(){
 
   return(
   <div>
-    <div className={`border p-4 ${playerOrder === 'player1' ? 'bg-red-500' : 'bg-blue-500'}`}>
+    <div className={`border p-4 ${playerOrder === PLAYER.ONE ? 'bg-red-500' : 'bg-blue-500'}`}>
       <div className="text-white">{playerOrder}</div> 
       <div className="">
-        <button className={`border p-4 w-24 ${ playerSelection === 'attack' && PLAYER_COLORS[playerOrder].attack || 'bg-white'}`} 
-        onClick={() => {setPlayerSelection("attack"); }}>
+        <button className={`border p-4 w-24 ${ playerSelection === SELECTION.ATTACK && PLAYER_COLORS[playerOrder].attack || 'bg-white'}`} 
+        onClick={() => {setPlayerSelection(SELECTION.ATTACK); }}>
           Attack
         </button>
-        <button className={`border p-4 w-24 ${playerSelection === 'defend' && PLAYER_COLORS[playerOrder].defend || 'bg-white'}`}
-        onClick={() => {setPlayerSelection("defend"); }}>
+        <button className={`border p-4 w-24 ${playerSelection === SELECTION.DEFEND && PLAYER_COLORS[playerOrder].defend || 'bg-white'}`}
+        onClick={() => {setPlayerSelection(SELECTION.DEFEND); }}>
           Defend
         </button>
       </div>
@@ -85,9 +86,9 @@ function GameMenu(){
     </div>
 
     <div>
-      {gameStatus === 'COMPLETE' && winner === 'draw' && <div>
+      {gameStatus === GAME_STATUS.COMPLETE && winner === DRAW && <div>
       <p>Draw</p></div>}
-      {gameStatus === 'COMPLETE' && winner !== 'draw' && <div>
+      {gameStatus === GAME_STATUS.COMPLETE && winner !== DRAW && <div>
       <p>{winner} wins</p></div>}
     </div>
   </div>)
