@@ -1,6 +1,6 @@
 import { useGameActions, useGameState } from "../gameProvider";
 import { useState } from "react";
-import CopyButton from "./copyButton";
+import CopyButton from "./CopyButton";
 
 export default function Chat(){
   const state = useGameState();

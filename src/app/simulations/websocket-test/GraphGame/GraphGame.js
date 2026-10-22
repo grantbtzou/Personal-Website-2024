@@ -1,13 +1,13 @@
-import Chat from "./Chat/chat"
+import Chat from "./Chat/Chat"
 import { useCallback } from "react"
 import { useGameActions, useGameState } from "./gameProvider";
 import { ReactFlow } from "@xyflow/react";
-import LaneNode from "./GameComponents/laneNode";
-import BaseNode from "./GameComponents/baseNode";
-import LabelNode from "./GameComponents/labelNode";
+import LaneNode from "./GameComponents/LaneNode";
+import BaseNode from "./GameComponents/BaseNode";
+import LabelNode from "./GameComponents/LabelNode";
 import '@xyflow/react/dist/style.css';
-import GameMenu from "./Menu/gameMenu";
-import GameLog from "./GameLog/gameLog";
+import GameMenu from "./Menu/GameMenu";
+import GameLog from "./GameLog/GameLog";
 export default function GraphGame( { roomId }){
   const state = useGameState();
   const { send } = useGameActions();

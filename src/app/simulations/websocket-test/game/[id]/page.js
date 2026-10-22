@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from "react";
-import GraphGame from "./GraphGame/graphGame";
-import { useGameActions } from "./GraphGame/gameProvider";
+import GraphGame from "../../GraphGame/GraphGame";
+import { useGameActions } from "../../GraphGame/gameProvider";
 
 export default function Page({ params }){
   const { id } = params;

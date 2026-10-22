@@ -10,14 +10,14 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "../../../Socket/websocketprovider";
+import { useSocket } from "../Socket/websocketprovider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
 
 const GameStateContext = createContext(null);
 const GameActionsContext = createContext(null);
 
-const GAME_PATH = "/Simulations/websockettest/game";
+const GAME_PATH = "/simulations/websocket-test/game";
 const JOINED_TYPES = ["GAME_CREATED", "SUCCESSFUL_CONNECTION", "RECONNECT_SUCCESS"];
 const RECONNECT_KEY = "reconnect";
 

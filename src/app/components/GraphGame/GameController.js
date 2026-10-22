@@ -1,11 +1,11 @@
-import GameMenu from "./gameMenu";
+import GameMenu from "./GameMenu";
 import { GameContext } from './gameContext';
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { ReactFlow, applyNodeChanges, applyEdgeChanges, addEdge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useReactFlow } from '@xyflow/react';
-import GameNode from '@/app/components/GraphGame/gameNode';
-import BaseNode from '@/app/components/GraphGame/baseNode';
+import GameNode from '@/app/components/GraphGame/GameNode';
+import BaseNode from '@/app/components/GraphGame/BaseNode';
 
 const createGameNode = (position, file, rank) => ({
   id: `n${file}.${rank}`, 

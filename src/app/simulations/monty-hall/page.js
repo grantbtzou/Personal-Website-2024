@@ -1,5 +1,5 @@
-import MontyHall from "@/app/components/montyHall"
-import ManyDoorMontyHall from "@/app/components/manyDoorMontyHall"
+import MontyHall from "@/app/components/MontyHall"
+import ManyDoorMontyHall from "@/app/components/ManyDoorMontyHall"
 
 export const metadata = {
   title: "Grant Zou | Monty Hall",

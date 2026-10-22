@@ -1,5 +1,5 @@
 import { useSocket } from "./Socket/websocketprovider";
-import { useGameActions, useGameState } from "./game/[id]/GraphGame/gameProvider";
+import { useGameActions, useGameState } from "./GraphGame/gameProvider";
 import { useState } from "react";
 
 export default function NewGame(){

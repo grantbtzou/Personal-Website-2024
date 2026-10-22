@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 
-import WinRate from "./winRate";
+import WinRate from "./WinRate";
 
 const generateDoors = () => {
     const doors = [false, false, false];

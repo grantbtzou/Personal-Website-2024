@@ -1,5 +1,5 @@
 'use client'
-import GraphGame from '@/app/components/GraphGame/graphGame';
+import GraphGame from '@/app/components/GraphGame/GraphGame';
 
 
 export default function Page(){

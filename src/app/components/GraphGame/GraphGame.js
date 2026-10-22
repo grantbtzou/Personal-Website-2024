@@ -1,5 +1,5 @@
 import { ReactFlowProvider } from "@xyflow/react";
-import GameController from "./gameController";
+import GameController from "./GameController";
 export default function GraphGame() {
   return (
     <ReactFlowProvider>

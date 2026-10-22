@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
-import WinRate from "./winRate";
+import WinRate from "./WinRate";
 
 export default function ManyDoorMontyHall(){
     const generateDoors = (size) => {
