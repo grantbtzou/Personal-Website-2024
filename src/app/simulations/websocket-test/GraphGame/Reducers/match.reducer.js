@@ -11,6 +11,8 @@ export function matchReducer(state, action){
         gameStatus: action.payload.status,
         playerOrder: action.payload.playerOrder,
         log: action.payload.log,
+        // The last log entry is the turn being played, so (re)joining always lands on it.
+        viewingTurn: action.payload.log.length,
       };
     case SERVER_MSG.GAME_START:
       return {
