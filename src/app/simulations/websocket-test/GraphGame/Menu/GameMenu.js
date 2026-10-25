@@ -1,5 +1,6 @@
 import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useEffect } from "react";
+import { Sword, Shield } from "lucide-react";
 import { PLAYER_COLORS } from "@/app/simulations/websocket-test/GraphGame/constants";
 import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/websocket-test/protocol";
 
@@ -11,6 +12,8 @@ function GameMenu(){
   const confirmation = state.match.moveConfirmed;
   const playerOrder = state.match.playerOrder;
   const winner = state.match.winner;
+  // Spectators have no player colours.
+  const colors = PLAYER_COLORS[playerOrder];
   function setPlayerSelection(selection) {
     if(gameStatus !== GAME_STATUS.IN_PROGRESS){
       return;
@@ -63,12 +66,14 @@ function GameMenu(){
     <div className={`border p-4 ${playerOrder === PLAYER.ONE ? 'bg-red-500' : 'bg-blue-500'}`}>
       <div className="text-white">{playerOrder}</div> 
       <div className="">
-        <button className={`border p-4 w-24 ${ playerSelection === SELECTION.ATTACK && PLAYER_COLORS[playerOrder].attack || 'bg-white'}`} 
+        <button className={`border p-4 w-24 flex items-center justify-center gap-1 ${ playerSelection === SELECTION.ATTACK && colors?.light || 'bg-white'}`}
         onClick={() => {setPlayerSelection(SELECTION.ATTACK); }}>
+          <Sword size={16} className={colors?.icon} aria-hidden="true" />
           Attack
         </button>
-        <button className={`border p-4 w-24 ${playerSelection === SELECTION.DEFEND && PLAYER_COLORS[playerOrder].defend || 'bg-white'}`}
+        <button className={`border p-4 w-24 flex items-center justify-center gap-1 ${playerSelection === SELECTION.DEFEND && colors?.light || 'bg-white'}`}
         onClick={() => {setPlayerSelection(SELECTION.DEFEND); }}>
+          <Shield size={16} className={colors?.icon} aria-hidden="true" />
           Defend
         </button>
       </div>

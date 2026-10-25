@@ -1,5 +1,6 @@
 import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { LOCAL_ACTION } from "@/app/simulations/websocket-test/GraphGame/constants";
+import { Sword, Shield } from "lucide-react";
 function GameLog(){
   const state = useGameState();
   const { dispatch } = useGameActions();
@@ -36,12 +37,12 @@ function GameLog(){
             <div className="w-6"><p>{logEntry.turnNumber}</p></div>
             <div className="flex-1">
               <div className="flex flex-row">
-                <div><p>A</p></div>
+                <div><Sword size={16} aria-label="Attack" /></div>
                 <p className="w-1/2 text-center">{player1Attack}</p>
                 <p className="w-1/2 text-center">{player2Attack}</p>
               </div>
               <div className="flex flex-row">
-                <div><p>D</p></div>
+                <div><Shield size={16} aria-label="Defend" /></div>
                 <p className="w-1/2 text-center">{player1Defend}</p>
                 <p className="w-1/2 text-center">{player2Defend}</p>
               </div>
