@@ -8,6 +8,8 @@ export default function Page({ params }){
   const { joinRoom } = useGameActions();
   useEffect(() => {
     joinRoom(id);
+    // Clear the target on leave, so a later reconnect doesn't rejoin this room.
+    return () => joinRoom(null);
   }, [id, joinRoom]);
   return(<div>
     <GraphGame roomId={id}/>
