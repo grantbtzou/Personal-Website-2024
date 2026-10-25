@@ -31,29 +31,14 @@ function LaneNode({ id, data = {} }) {
     }`} />
   );
 
-  if(state.game.differences.attack === id){
-    var intent = SELECTION.ATTACK;
-  } else if(state.game.differences.defend === id){
-    var intent = SELECTION.DEFEND;
-  }
-
   return (
-    <div className={`h-16 w-16 rounded-full border-2 ${
-        intent  
-          ? PLAYER_COLORS[state.match.playerOrder][intent]
-          : data.owner === PLAYER.ONE
-          ? 'bg-red-500'
-          : data.owner === PLAYER.TWO
-          ? 'bg-blue-500'
-          : 'bg-white'
-      }`}
-    >
+    <div className="h-16 w-16 rounded-full border-2">
        <Handle
         id = 'top'
         type="source"
         position={Position.Top}
       />
-      {(viewingTurn !== state.match.log.length-1) && nodeContent}
+      {nodeContent}
       <div>{}</div>
       <Handle
         id = 'bot'

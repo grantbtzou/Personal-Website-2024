@@ -29,29 +29,15 @@ function BaseNode({ id, data = {} }) {
       data.owner === PLAYER.TWO ? 'bg-blue-500' : 'bg-white'
     }`} />
   );
-  if(state.game.differences.attack === id){
-    var intent = SELECTION.ATTACK;
-  } else if(state.game.differences.defend === id){
-    var intent = SELECTION.DEFEND;
-  }
-
   return (
-    <div className={`h-16 w-16 border-2 rounded-full ${
-        intent && data.owner 
-          ? PLAYER_COLORS[data.owner][intent]
-          : data.owner === PLAYER.ONE
-          ? 'bg-red-500'
-          : data.owner === PLAYER.TWO
-          ? 'bg-blue-500'
-          : 'bg-white'
-      }`}>
+    <div className="h-16 w-16 border-2 rounded-full">
        {data.baseOwner === PLAYER.TWO && (
         <Handle
         id = 'top'
         type="target"
         position={Position.Top}
       />)}
-       {(viewingTurn !== state.match.log.length-1) && nodeContent}
+       {nodeContent}
       <div>{}</div>
         {data.baseOwner === PLAYER.ONE && (
         <Handle

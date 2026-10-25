@@ -35,6 +35,18 @@ export function matchReducer(state, action){
         ...state,
         viewingTurn: action.payload.viewingTurn,
       }
+    // The current turn's log entry is the only record of your attack and defend.
+    // The server sends its selections with the opponent's hidden until the turn resolves.
+    case SERVER_MSG.ATTACK_CHANGE:
+    case SERVER_MSG.DEFEND_CHANGE:
+      return{
+        ...state,
+        log: state.log.map((entry) =>
+          entry.turnNumber === action.payload.turnNumber
+            ? { ...entry, selections: action.payload.selections }
+            : entry
+        ),
+      };
     case SERVER_MSG.SELECTION_SET:
       return{
         ...state, 
