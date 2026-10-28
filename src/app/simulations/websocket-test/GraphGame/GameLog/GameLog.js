@@ -1,8 +1,8 @@
-import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
+import { useGameActions, useMatchState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { LOCAL_ACTION } from "@/app/simulations/websocket-test/GraphGame/constants";
 import { Sword, Shield } from "lucide-react";
 function GameLog(){
-  const state = useGameState();
+  const match = useMatchState();
   const { dispatch } = useGameActions();
 
   const handleTurnClick = (index) => {
@@ -21,12 +21,12 @@ function GameLog(){
       </div>
     </div>
 
-    {state.match.log.map((logEntry, index) => {
+    {match.log.map((logEntry, index) => {
       const player1Attack = logEntry.selections.player1.attack;
       const player2Attack = logEntry.selections.player2.attack;
       const player1Defend = logEntry.selections.player1.defend;
       const player2Defend = logEntry.selections.player2.defend;
-      const isViewing = state.match.viewingTurn === index + 1;
+      const isViewing = match.viewingTurn === index + 1;
       return (
         <button
           key={index}

@@ -1,6 +1,6 @@
 import Chat from "./Chat/Chat"
 import { useCallback } from "react"
-import { useGameActions, useGameState } from "./gameProvider";
+import { useGameActions, useGameState, useMatchState } from "./gameProvider";
 import { ReactFlow } from "@xyflow/react";
 import LaneNode from "./GameComponents/LaneNode";
 import BaseNode from "./GameComponents/BaseNode";
@@ -9,20 +9,23 @@ import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
 import { CLIENT_MSG, SELECTION } from "@/app/simulations/websocket-test/protocol";
+
+const nodeTypes = {
+  laneNode: LaneNode,
+  baseNode: BaseNode,
+  labelNode: LabelNode,
+}
+
 export default function GraphGame( { roomId }){
   const state = useGameState();
+  const match = useMatchState();
   const { send } = useGameActions();
 
-  const isReplaying = state.match.log.length > 0 && state.match.viewingTurn !== state.match.log.length;
+  const isReplaying = match.log.length > 0 && match.viewingTurn !== match.log.length;
   console.log("is replaying: ", isReplaying);
-  console.log("rendering game with log length", state.match.log.length, "and viewing turn", state.match.viewingTurn)
-  console.log("current log: ", state.match.log);
-  const playerSelection = state.match.playerSelection;
-  const nodeTypes = {
-    laneNode: LaneNode,
-    baseNode: BaseNode,
-    labelNode: LabelNode,
-  }
+  console.log("rendering game with log length", match.log.length, "and viewing turn", match.viewingTurn)
+  console.log("current log: ", match.log);
+  const playerSelection = match.playerSelection;
 
   const onNodesChange = useCallback(
     // (changes) => {
@@ -71,8 +74,8 @@ export default function GraphGame( { roomId }){
   <div>
     <div className="mx-auto mt-12 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
-        nodes={isReplaying ? state.match.log[state.match.viewingTurn-1].before.nodes : state.game.nodes}
-        edges={isReplaying ? state.match.log[state.match.viewingTurn-1].before.edges : state.game.edges}
+        nodes={isReplaying ? match.log[match.viewingTurn-1].before.nodes : state.game.nodes}
+        edges={isReplaying ? match.log[match.viewingTurn-1].before.edges : state.game.edges}
         nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}

@@ -16,7 +16,10 @@ import { initialGameState } from "./initialState";
 import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/websocket-test/protocol";
 import { SOCKET_STATUS } from "@/app/simulations/websocket-test/Socket/constants";
 
-const GameStateContext = createContext(null);
+// State is split by how often it changes, so e.g. a chat message only re-renders chat consumers.
+const GameStateContext = createContext(null); // connection + game
+const MatchStateContext = createContext(null);
+const ChatStateContext = createContext(null);
 const GameActionsContext = createContext(null);
 
 const GAME_PATH = "/simulations/websocket-test/game";
@@ -100,14 +103,26 @@ export function GameProvider({ children }) {
     [send]
   );
 
+  // Slice reducers return the same object when unchanged, so this only changes with connection or game.
+  const gameState = useMemo(
+    () => ({ connection: state.connection, game: state.game }),
+    [state.connection, state.game]
+  );
+
   return (
     <GameActionsContext.Provider value={actions}>
-      <GameStateContext.Provider value={state}>
-        {children}
+      <GameStateContext.Provider value={gameState}>
+        <MatchStateContext.Provider value={state.match}>
+          <ChatStateContext.Provider value={state.chat}>
+            {children}
+          </ChatStateContext.Provider>
+        </MatchStateContext.Provider>
       </GameStateContext.Provider>
     </GameActionsContext.Provider>
   );
 }
 
 export const useGameState = () => useContext(GameStateContext);
+export const useMatchState = () => useContext(MatchStateContext);
+export const useChatState = () => useContext(ChatStateContext);
 export const useGameActions = () => useContext(GameActionsContext);

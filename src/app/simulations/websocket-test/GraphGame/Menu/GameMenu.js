@@ -1,4 +1,4 @@
-import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
+import { useGameActions, useGameState, useMatchState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useEffect } from "react";
 import { Sword, Shield } from "lucide-react";
 import { PLAYER_COLORS } from "@/app/simulations/websocket-test/GraphGame/constants";
@@ -6,12 +6,13 @@ import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulati
 
 function GameMenu(){
   const state = useGameState();
+  const match = useMatchState();
   const { send } = useGameActions();
-  const playerSelection = state.match.playerSelection;
-  const gameStatus = state.match.gameStatus;
-  const confirmation = state.match.moveConfirmed;
-  const playerOrder = state.match.playerOrder;
-  const winner = state.match.winner;
+  const playerSelection = match.playerSelection;
+  const gameStatus = match.gameStatus;
+  const confirmation = match.moveConfirmed;
+  const playerOrder = match.playerOrder;
+  const winner = match.winner;
   // Spectators have no player colours.
   const colors = PLAYER_COLORS[playerOrder];
   function setPlayerSelection(selection) {

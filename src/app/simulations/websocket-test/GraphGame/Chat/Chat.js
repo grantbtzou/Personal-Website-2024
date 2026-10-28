@@ -1,10 +1,11 @@
-import { useGameActions, useGameState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
+import { useGameActions, useGameState, useChatState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useState } from "react";
 import CopyButton from "./CopyButton";
 import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/websocket-test/protocol";
 
 export default function Chat(){
   const state = useGameState();
+  const chat = useChatState();
   const { send } = useGameActions();
   const [message, setMessage] = useState('');
 
@@ -28,7 +29,7 @@ export default function Chat(){
     <h1>Player id: {state.connection.playerId}</h1>
     <ul className="border-2 overflow-y-auto h-[250px]">
       <ul>
-      {state.chat.messages.map((m, i) => {
+      {chat.messages.map((m, i) => {
         let label = "";
 
         if (m.userType === USER_TYPE.PLAYER) label = `Player ${m.user}: `;

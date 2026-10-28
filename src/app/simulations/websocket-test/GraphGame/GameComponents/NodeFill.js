@@ -1,5 +1,5 @@
 import { Sword, Shield } from 'lucide-react';
-import { useGameState } from '@/app/simulations/websocket-test/GraphGame/gameProvider';
+import { useMatchState } from '@/app/simulations/websocket-test/GraphGame/gameProvider';
 import { PLAYER_COLORS } from '@/app/simulations/websocket-test/GraphGame/constants';
 import { PLAYER, SELECTION } from '@/app/simulations/websocket-test/protocol';
 
@@ -12,8 +12,8 @@ const ICONS = {
 // light colour (split in half if both players picked it) and shows a sword or shield per selection.
 // Otherwise it shows the owner's colour.
 export default function NodeFill({ nodeId, owner }) {
-  const state = useGameState();
-  const selections = state.match.log[state.match.viewingTurn - 1].selections;
+  const match = useMatchState();
+  const selections = match.log[match.viewingTurn - 1].selections;
 
   const picks = [PLAYER.ONE, PLAYER.TWO].flatMap((player) =>
     [SELECTION.ATTACK, SELECTION.DEFEND]
