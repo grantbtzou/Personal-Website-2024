@@ -8,6 +8,8 @@ export function matchReducer(state, action){
       return{
         ...state,  
         playerSelection: action.payload.playerSelection,
+        // Only RECONNECT_SUCCESS carries this; a new or joined player hasn't confirmed.
+        moveConfirmed: action.payload.moveConfirmed ?? false,
         gameStatus: action.payload.status,
         playerOrder: action.payload.playerOrder,
         log: action.payload.log,

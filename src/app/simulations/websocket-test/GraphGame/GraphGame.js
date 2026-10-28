@@ -51,7 +51,8 @@ export default function GraphGame( { roomId }){
   const isValidConnection = useCallback((connection) => {})
 
   const onNodeClick = useCallback((_, clickedNode) => {
-    if(isReplaying){
+    // The server rejects selection changes after confirming, so don't send them.
+    if(isReplaying || match.moveConfirmed){
       return;
     }
     if(playerSelection === SELECTION.ATTACK){
@@ -68,7 +69,7 @@ export default function GraphGame( { roomId }){
         node: clickedNode,
       })
     }
-  }, [state.game.nodes, playerSelection]);
+  }, [state.game.nodes, playerSelection, isReplaying, match.moveConfirmed, roomId, send]);
   
   return(
   <div>
