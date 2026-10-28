@@ -10,6 +10,7 @@ export const CLIENT_MSG = Object.freeze({
   CONFIRM_SELECTION: "CONFIRM_SELECTION",
   SET_ATTACK: "SET_ATTACK",
   SET_DEFEND: "SET_DEFEND",
+  UNDO: "UNDO",
 });
 
 // Messages the server sends. Each is dispatched to the reducers as-is.
@@ -27,6 +28,7 @@ export const SERVER_MSG = Object.freeze({
   GAME_OVER: "GAME_OVER",
   ATTACK_CHANGE: "ATTACK_CHANGE",
   DEFEND_CHANGE: "DEFEND_CHANGE",
+  SELECTION_UNDONE: "SELECTION_UNDONE",
   SELECTION_SET: "SELECTION_SET",
   CONFIRMATION_SET: "CONFIRMATION_SET",
   BOTH_CONFIRMED: "BOTH_CONFIRMED",

@@ -11,6 +11,7 @@ export const initialGameState = {
     playerSelection: null,
     gameStatus: null,
     moveConfirmed: false,
+    canUndo: false,
     log: [],
     winner: null,
     viewingTurn: 1,

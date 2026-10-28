@@ -1,6 +1,6 @@
 import { useGameActions, useGameState, useMatchState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
 import { useEffect } from "react";
-import { Sword, Shield } from "lucide-react";
+import { Sword, Shield, Undo2 } from "lucide-react";
 import { PLAYER_COLORS } from "@/app/simulations/websocket-test/GraphGame/constants";
 import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/websocket-test/protocol";
 
@@ -13,6 +13,7 @@ function GameMenu(){
   const confirmation = match.moveConfirmed;
   const playerOrder = match.playerOrder;
   const winner = match.winner;
+  const undoEnabled = gameStatus === GAME_STATUS.IN_PROGRESS && match.canUndo && !confirmation;
   // Spectators have no player colours.
   const colors = PLAYER_COLORS[playerOrder];
   function setPlayerSelection(selection) {
@@ -32,6 +33,30 @@ function GameMenu(){
       roomId: state.connection.connectedRoom,
     })
   }
+
+  function selectUndo(){
+    if(!undoEnabled){
+      return;
+    }
+    send({
+      type: CLIENT_MSG.UNDO,
+      roomId: state.connection.connectedRoom,
+    })
+  }
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+        // Leave Ctrl+Z alone while typing, e.g. in the chat box.
+        if (e.target.closest('input, textarea, [contenteditable="true"]')) return;
+        e.preventDefault();
+        selectUndo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [undoEnabled]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -86,8 +111,15 @@ function GameMenu(){
         <button className={`border p-4 bg-white w-24`}
           onClick={() => selectConfirm()}>
           Confirm
-        </button> 
+        </button>
       }
+      <button className={`border p-4 w-24 flex items-center justify-center gap-1 bg-white disabled:opacity-50`}
+        disabled={!undoEnabled}
+        onClick={() => selectUndo()}>
+        <Undo2 size={16} aria-hidden="true" />
+        Undo
+      </button>
+
      
     </div>
 

@@ -10,6 +10,7 @@ export function matchReducer(state, action){
         playerSelection: action.payload.playerSelection,
         // Only RECONNECT_SUCCESS carries this; a new or joined player hasn't confirmed.
         moveConfirmed: action.payload.moveConfirmed ?? false,
+        canUndo: action.payload.canUndo ?? false,
         gameStatus: action.payload.status,
         playerOrder: action.payload.playerOrder,
         log: action.payload.log,
@@ -43,8 +44,10 @@ export function matchReducer(state, action){
     // The server sends its selections with the opponent's hidden until the turn resolves.
     case SERVER_MSG.ATTACK_CHANGE:
     case SERVER_MSG.DEFEND_CHANGE:
+    case SERVER_MSG.SELECTION_UNDONE:
       return{
         ...state,
+        canUndo: action.payload.canUndo,
         log: state.log.map((entry) =>
           entry.turnNumber === action.payload.turnNumber
             ? { ...entry, selections: action.payload.selections }
@@ -63,8 +66,10 @@ export function matchReducer(state, action){
       }
     case SERVER_MSG.BOTH_CONFIRMED:
       return{
-        ...state, 
+        ...state,
         moveConfirmed: false,
+        // The server clears the undo stack when the turn resolves.
+        canUndo: false,
       }
     default: 
       return state;
