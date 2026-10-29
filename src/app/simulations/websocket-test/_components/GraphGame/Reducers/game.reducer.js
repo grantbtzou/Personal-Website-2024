@@ -1,5 +1,5 @@
 import { applyNodeChanges } from '@xyflow/react';
-import { SERVER_MSG } from '@/app/simulations/websocket-test/protocol';
+import { SERVER_MSG } from '@/app/simulations/websocket-test/_lib/protocol';
 export function gameStateReducer(state, action) {
   switch (action.type) {
     case SERVER_MSG.GAME_CREATED:

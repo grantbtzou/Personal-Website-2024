@@ -1,4 +1,4 @@
-import { SERVER_MSG } from "@/app/simulations/websocket-test/protocol";
+import { SERVER_MSG } from "@/app/simulations/websocket-test/_lib/protocol";
 export function chatReducer(state, action){
   switch(action.type){
     case SERVER_MSG.GAME_CREATED:

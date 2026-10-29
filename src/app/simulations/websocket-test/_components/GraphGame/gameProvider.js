@@ -10,11 +10,11 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "@/app/simulations/websocket-test/Socket/websocketprovider";
+import { useSocket } from "@/app/simulations/websocket-test/_lib/socket/websocketprovider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
-import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/websocket-test/protocol";
-import { SOCKET_STATUS } from "@/app/simulations/websocket-test/Socket/constants";
+import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/websocket-test/_lib/protocol";
+import { SOCKET_STATUS } from "@/app/simulations/websocket-test/_lib/socket/constants";
 
 // State is split by how often it changes, so e.g. a chat message only re-renders chat consumers.
 const GameStateContext = createContext(null); // connection + game

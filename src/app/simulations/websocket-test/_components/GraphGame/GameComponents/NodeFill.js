@@ -1,7 +1,7 @@
 import { Sword, Shield } from 'lucide-react';
-import { useMatchState } from '@/app/simulations/websocket-test/GraphGame/gameProvider';
-import { PLAYER_COLORS } from '@/app/simulations/websocket-test/GraphGame/constants';
-import { PLAYER, SELECTION } from '@/app/simulations/websocket-test/protocol';
+import { useMatchState } from '@/app/simulations/websocket-test/_components/GraphGame/gameProvider';
+import { PLAYER_COLORS } from '@/app/simulations/websocket-test/_components/GraphGame/constants';
+import { PLAYER, SELECTION } from '@/app/simulations/websocket-test/_lib/protocol';
 
 const ICONS = {
   [SELECTION.ATTACK]: { Icon: Sword, label: 'Attack' },

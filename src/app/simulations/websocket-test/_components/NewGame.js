@@ -1,8 +1,8 @@
-import { useSocket } from "./Socket/websocketprovider";
+import { useSocket } from "../_lib/socket/websocketprovider";
 import { useGameActions, useGameState } from "./GraphGame/gameProvider";
 import { useState } from "react";
-import { CLIENT_MSG } from "@/app/simulations/websocket-test/protocol";
-import { SOCKET_STATUS } from "@/app/simulations/websocket-test/Socket/constants";
+import { CLIENT_MSG } from "@/app/simulations/websocket-test/_lib/protocol";
+import { SOCKET_STATUS } from "@/app/simulations/websocket-test/_lib/socket/constants";
 
 export default function NewGame(){
   const state = useGameState();

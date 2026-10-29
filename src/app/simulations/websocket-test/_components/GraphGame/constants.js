@@ -1,4 +1,4 @@
-import { PLAYER } from '@/app/simulations/websocket-test/protocol';
+import { PLAYER } from '@/app/simulations/websocket-test/_lib/protocol';
 
 // Client-only reducer actions; never sent to or received from the server.
 export const LOCAL_ACTION = Object.freeze({

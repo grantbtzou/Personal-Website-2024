@@ -1,5 +1,5 @@
-import { useGameActions, useMatchState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
-import { LOCAL_ACTION } from "@/app/simulations/websocket-test/GraphGame/constants";
+import { useGameActions, useMatchState } from "@/app/simulations/websocket-test/_components/GraphGame/gameProvider";
+import { LOCAL_ACTION } from "@/app/simulations/websocket-test/_components/GraphGame/constants";
 import { Sword, Shield } from "lucide-react";
 function GameLog(){
   const match = useMatchState();

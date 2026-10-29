@@ -1,5 +1,5 @@
 'use client'
-import NewGame from "./NewGame";
+import NewGame from "./_components/NewGame";
 
 export default function Page(){
   return (

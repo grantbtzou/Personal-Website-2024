@@ -1,5 +1,5 @@
-import { SERVER_MSG, GAME_STATUS } from "@/app/simulations/websocket-test/protocol";
-import { LOCAL_ACTION } from "@/app/simulations/websocket-test/GraphGame/constants";
+import { SERVER_MSG, GAME_STATUS } from "@/app/simulations/websocket-test/_lib/protocol";
+import { LOCAL_ACTION } from "@/app/simulations/websocket-test/_components/GraphGame/constants";
 export function matchReducer(state, action){
   switch(action.type){
     case SERVER_MSG.GAME_CREATED:

@@ -1,7 +1,7 @@
-import { useGameActions, useGameState, useChatState } from "@/app/simulations/websocket-test/GraphGame/gameProvider";
+import { useGameActions, useGameState, useChatState } from "@/app/simulations/websocket-test/_components/GraphGame/gameProvider";
 import { useState } from "react";
 import CopyButton from "./CopyButton";
-import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/websocket-test/protocol";
+import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/websocket-test/_lib/protocol";
 
 export default function Chat(){
   const state = useGameState();

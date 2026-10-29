@@ -8,7 +8,7 @@ import LabelNode from "./GameComponents/LabelNode";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
-import { CLIENT_MSG, SELECTION } from "@/app/simulations/websocket-test/protocol";
+import { CLIENT_MSG, SELECTION } from "@/app/simulations/websocket-test/_lib/protocol";
 
 const nodeTypes = {
   laneNode: LaneNode,
