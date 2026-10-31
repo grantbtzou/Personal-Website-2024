@@ -1,5 +1,5 @@
 import { useGameActions, useGameState, useChatState } from "@/app/simulations/websocket-test/_components/GraphGame/gameProvider";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CopyButton from "./CopyButton";
 import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/websocket-test/_lib/protocol";
 
@@ -8,6 +8,13 @@ export default function Chat(){
   const chat = useChatState();
   const { send } = useGameActions();
   const [message, setMessage] = useState('');
+  const messagesRef = useRef(null);
+
+  // Keep the newest message in view as messages arrive.
+  useEffect(() => {
+    const list = messagesRef.current;
+    if (list) list.scrollTop = list.scrollHeight;
+  }, [chat.messages]);
 
   const sendMessage = () => {
     send({
@@ -18,8 +25,8 @@ export default function Chat(){
 
     setMessage("");
   };
-  return(<div>
-    {state.connection.connectedRoom && <div className="w-96 mx-auto mb-24">
+  return(<div className="flex flex-col flex-1 min-h-0">
+    {state.connection.connectedRoom && <div className="w-96 mx-auto flex flex-col flex-1 min-h-0">
     <div className="flex gap-2">
       <h1>Connected room: {state.connection.connectedRoom}</h1> 
       <CopyButton text={state.connection.connectedRoom} />
@@ -27,8 +34,7 @@ export default function Chat(){
     
 
     <h1>Player id: {state.connection.playerId}</h1>
-    <ul className="border-2 overflow-y-auto h-[250px]">
-      <ul>
+    <ul ref={messagesRef} className="border-2 overflow-y-auto flex-1 min-h-0 break-words">
       {chat.messages.map((m, i) => {
         let label = "";
 
@@ -47,13 +53,15 @@ export default function Chat(){
           </li>
         );
       })}
-      </ul>
     </ul>
-    <input
-      value={message}
-      onChange={(e) => setMessage(e.target.value)}
-      onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-    />
-    <button onClick={sendMessage}>Send</button></div>}
+    <div className="flex">
+      <input
+        className="flex-1 min-w-0 border-2 px-2"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        onKeyDown={(e) => e.key === "Enter" && sendMessage()}
+      />
+      <button className="border-2 border-l-0 px-4 py-2" onClick={sendMessage}>Send</button>
+    </div></div>}
   </div>)
 }

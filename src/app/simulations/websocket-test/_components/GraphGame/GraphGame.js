@@ -94,7 +94,7 @@ export default function GraphGame( { roomId }){
       <div>
         <GameLog/>
       </div>
-      <div className="flex-col">
+      <div className="flex flex-col min-h-0">
         <GameMenu/>
         <Chat/>
       </div>
