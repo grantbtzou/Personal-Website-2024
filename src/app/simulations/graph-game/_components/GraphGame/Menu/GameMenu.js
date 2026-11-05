@@ -91,13 +91,24 @@ function GameMenu(){
   <div>
     <div className={`border p-4 ${playerOrder === PLAYER.ONE ? 'bg-red-500' : 'bg-blue-500'}`}>
       <div className="text-white">{playerOrder}</div> 
-      <div className="">
-        <button className={`border p-4 w-24 flex items-center justify-center gap-1 ${ playerSelection === SELECTION.ATTACK && colors?.light || 'bg-white'}`}
+      {/* One highlight sits behind both buttons and slides between them, so switching between
+          attack and defend moves the colour instead of swapping it. It covers the top half for
+          attack and the bottom half for defend, using the same overshooting curve as the node fill. */}
+      <div className="relative w-24 overflow-hidden bg-white">
+        <div
+          aria-hidden="true"
+          className={`absolute inset-x-0 top-0 h-1/2 ${colors?.light ?? ''} motion-safe:transition-transform motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
+            playerSelection === SELECTION.DEFEND ? 'translate-y-full' : 'translate-y-0'
+          } ${colors && playerSelection ? '' : 'hidden'}`}
+        />
+        <button className="relative border p-4 w-24 flex items-center justify-center gap-1"
+        aria-pressed={playerSelection === SELECTION.ATTACK}
         onClick={() => {setPlayerSelection(SELECTION.ATTACK); }}>
           <Sword size={16} className={colors?.icon} aria-hidden="true" />
           Attack
         </button>
-        <button className={`border p-4 w-24 flex items-center justify-center gap-1 ${playerSelection === SELECTION.DEFEND && colors?.light || 'bg-white'}`}
+        <button className="relative border p-4 w-24 flex items-center justify-center gap-1"
+        aria-pressed={playerSelection === SELECTION.DEFEND}
         onClick={() => {setPlayerSelection(SELECTION.DEFEND); }}>
           <Shield size={16} className={colors?.icon} aria-hidden="true" />
           Defend
