@@ -1,8 +1,8 @@
-import { useGameActions, useGameState, useMatchState } from "@/app/simulations/websocket-test/_components/GraphGame/gameProvider";
+import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/gameProvider";
 import { useEffect } from "react";
 import { Sword, Shield, Undo2 } from "lucide-react";
-import { PLAYER_COLORS } from "@/app/simulations/websocket-test/_components/GraphGame/constants";
-import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/websocket-test/_lib/protocol";
+import { PLAYER_COLORS } from "@/app/simulations/graph-game/_components/GraphGame/constants";
+import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/graph-game/_lib/protocol";
 
 function GameMenu(){
   const state = useGameState();

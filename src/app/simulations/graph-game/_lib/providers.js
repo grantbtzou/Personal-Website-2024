@@ -1,7 +1,7 @@
 "use client";
 
 import { SocketProvider } from "./socket/websocketprovider";
-import { GameProvider } from "../_components/GraphGame/gameProvider";
+import { GameProvider } from "../_state/gameProvider";
 
 const WS_URL = process.env.NEXT_PUBLIC_WS_URL ?? "ws://localhost:8080";
 

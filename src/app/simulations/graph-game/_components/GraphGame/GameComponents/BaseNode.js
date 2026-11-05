@@ -1,5 +1,5 @@
 import { Handle, Position } from '@xyflow/react';
-import { PLAYER } from '@/app/simulations/websocket-test/_lib/protocol';
+import { PLAYER } from '@/app/simulations/graph-game/_lib/protocol';
 import NodeFill from './NodeFill';
 
 function BaseNode({ id, data = {} }) {

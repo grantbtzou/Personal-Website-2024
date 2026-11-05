@@ -1,6 +1,6 @@
 import Chat from "./Chat/Chat"
 import { useCallback } from "react"
-import { useGameActions, useGameState, useMatchState } from "./gameProvider";
+import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/gameProvider";
 import { ReactFlow } from "@xyflow/react";
 import LaneNode from "./GameComponents/LaneNode";
 import BaseNode from "./GameComponents/BaseNode";
@@ -8,7 +8,7 @@ import LabelNode from "./GameComponents/LabelNode";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
-import { CLIENT_MSG, SELECTION } from "@/app/simulations/websocket-test/_lib/protocol";
+import { CLIENT_MSG, SELECTION } from "@/app/simulations/graph-game/_lib/protocol";
 
 const nodeTypes = {
   laneNode: LaneNode,

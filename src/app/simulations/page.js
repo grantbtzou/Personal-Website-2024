@@ -24,11 +24,6 @@ export default function Page(){
                     Description="Play a game against an AI which adapts to your playstyle. Under development"
                     />
                     </div>
-                    <div><Simulation
-                    Path="simulations/websocket-test"
-                    Title="Web Socket Test"
-                    />
-                    </div>
                 </div>
             </div>
         </main>

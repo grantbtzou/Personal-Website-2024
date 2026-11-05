@@ -1,4 +1,4 @@
-import { SERVER_MSG } from "@/app/simulations/websocket-test/_lib/protocol";
+import { SERVER_MSG } from "@/app/simulations/graph-game/_lib/protocol";
 export function connectionReducer(state, action) {
   switch (action.type) {
     case SERVER_MSG.GAME_CREATED:

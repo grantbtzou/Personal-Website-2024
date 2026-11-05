@@ -10,11 +10,11 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "@/app/simulations/websocket-test/_lib/socket/websocketprovider";
+import { useSocket } from "@/app/simulations/graph-game/_lib/socket/websocketprovider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
-import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/websocket-test/_lib/protocol";
-import { SOCKET_STATUS } from "@/app/simulations/websocket-test/_lib/socket/constants";
+import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/graph-game/_lib/protocol";
+import { SOCKET_STATUS } from "@/app/simulations/graph-game/_lib/socket/constants";
 
 // State is split by how often it changes, so e.g. a chat message only re-renders chat consumers.
 const GameStateContext = createContext(null); // connection + game
@@ -22,7 +22,7 @@ const MatchStateContext = createContext(null);
 const ChatStateContext = createContext(null);
 const GameActionsContext = createContext(null);
 
-const GAME_PATH = "/simulations/websocket-test/game";
+const GAME_PATH = "/simulations/graph-game/game";
 const RECONNECT_KEY = "reconnect";
 
 // The server's reconnect token is tied to one room, so the room is stored next to it.
