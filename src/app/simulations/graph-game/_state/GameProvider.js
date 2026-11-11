@@ -10,7 +10,7 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/navigation";
-import { useSocket } from "@/app/simulations/graph-game/_lib/socket/websocketprovider";
+import { useSocket } from "@/app/simulations/graph-game/_lib/socket/SocketProvider";
 import { gameReducer } from "./gameReducer";
 import { initialGameState } from "./initialState";
 import { CLIENT_MSG, SERVER_MSG, JOINED_MSGS } from "@/app/simulations/graph-game/_lib/protocol";

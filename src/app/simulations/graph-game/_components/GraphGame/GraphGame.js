@@ -1,6 +1,6 @@
 import Chat from "./Chat/Chat"
 import { useCallback } from "react"
-import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/gameProvider";
+import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { ReactFlow } from "@xyflow/react";
 import LaneNode from "./GameComponents/LaneNode";
 import BaseNode from "./GameComponents/BaseNode";

@@ -3,6 +3,7 @@ import { PLAYER } from '@/app/simulations/graph-game/_lib/protocol';
 // Client-only reducer actions; never sent to or received from the server.
 export const LOCAL_ACTION = Object.freeze({
   SET_VIEWING_TURN: 'SET_VIEWING_TURN',
+  CLEAR_JOIN_ERROR: 'CLEAR_JOIN_ERROR',
 });
 
 export const PLAYER_COLORS = {

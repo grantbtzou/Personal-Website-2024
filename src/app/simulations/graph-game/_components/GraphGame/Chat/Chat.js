@@ -1,4 +1,4 @@
-import { useGameActions, useGameState, useChatState } from "@/app/simulations/graph-game/_state/gameProvider";
+import { useGameActions, useGameState, useChatState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { useEffect, useRef, useState } from "react";
 import CopyButton from "./CopyButton";
 import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/graph-game/_lib/protocol";

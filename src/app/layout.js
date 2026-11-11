@@ -3,7 +3,7 @@ import "./globals.css";
 
 import Header from "./components/Header";
 
-const rob_condensed = Roboto_Condensed({ subsets: ["latin"] });
+const robCondensed = Roboto_Condensed({ subsets: ["latin"] });
 
 export const metadata = {
   title: "Grant Zou",
@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={"flex flex-col h-screen " + rob_condensed.className}>
+      <body className={"flex flex-col h-screen " + robCondensed.className}>
       <div className="mt-16 md:mr-16"><Header /></div>
         {children}
       </body>

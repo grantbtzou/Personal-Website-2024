@@ -2,7 +2,8 @@ export const initialGameState = {
   connection: {
     connectedRoom: null,
     playerId: null,
-    invalidRoom: false,
+    // Why the last join failed: SERVER_MSG.INVALID_ROOM, SERVER_MSG.ROOM_FULL or null.
+    joinError: null,
     reconnectToken: null,
     error: null,
   },

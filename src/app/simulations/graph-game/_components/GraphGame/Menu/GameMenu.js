@@ -1,4 +1,4 @@
-import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/gameProvider";
+import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { useEffect } from "react";
 import { Sword, Shield, Undo2 } from "lucide-react";
 import { PLAYER_COLORS } from "@/app/simulations/graph-game/_components/GraphGame/constants";

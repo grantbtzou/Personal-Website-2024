@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Sword, Shield } from 'lucide-react';
-import { useMatchState } from '@/app/simulations/graph-game/_state/gameProvider';
+import { useMatchState } from '@/app/simulations/graph-game/_state/GameProvider';
 import { PLAYER_COLORS } from '@/app/simulations/graph-game/_components/GraphGame/constants';
 import { PLAYER, SELECTION } from '@/app/simulations/graph-game/_lib/protocol';
 

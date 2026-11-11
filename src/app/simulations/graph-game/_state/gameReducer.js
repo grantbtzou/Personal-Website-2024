@@ -1,7 +1,7 @@
-import { connectionReducer } from "./Reducers/connection.reducer";
-import { chatReducer } from "./Reducers/chat.reducer";
-import { gameStateReducer } from "./Reducers/game.reducer";
-import { matchReducer } from "./Reducers/match.reducer";
+import { connectionReducer } from "./reducers/connectionReducer";
+import { chatReducer } from "./reducers/chatReducer";
+import { gameStateReducer } from "./reducers/gameStateReducer";
+import { matchReducer } from "./reducers/matchReducer";
 
 export function gameReducer(state, action) {
   return {

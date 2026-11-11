@@ -12,16 +12,16 @@ export default function Page(){
                 <h1 className="text-7xl font-light text-center mt-20">Simulations</h1>
                 <div className="flex flex-wrap mx-auto mt-12 mb-24 gap-10 justify-center md:justify-start max-w-5xl">
                     <div><Simulation
-                    Path="simulations/monty-hall" 
-                    ImageUrl="/static/images/goat.jpg" 
-                    Title="Monty Hall Problem"
-                    Description="A simulation of the famous Monty Hall Problem"/>
+                    path="simulations/monty-hall" 
+                    imageUrl="/static/images/goat.jpg" 
+                    title="Monty Hall Problem"
+                    description="A simulation of the famous Monty Hall Problem"/>
                     </div>
                     <div><Simulation 
-                    Path="simulations/graph-game"
-                    ImageUrl="/static/images/TensorFlow_logo.svg.png"
-                    Title="AI Graph Game"
-                    Description="Play a game against an AI which adapts to your playstyle. Under development"
+                    path="simulations/graph-game"
+                    imageUrl="/static/images/TensorFlow_logo.svg.png"
+                    title="AI Graph Game"
+                    description="Play a game against an AI which adapts to your playstyle. Under development"
                     />
                     </div>
                 </div>

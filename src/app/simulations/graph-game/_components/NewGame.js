@@ -1,12 +1,14 @@
-import { useSocket } from "../_lib/socket/websocketprovider";
-import { useGameActions, useGameState } from "../_state/gameProvider";
+import { useSocket } from "../_lib/socket/SocketProvider";
+import { useGameActions, useGameState } from "../_state/GameProvider";
 import { useState } from "react";
 import { CLIENT_MSG } from "@/app/simulations/graph-game/_lib/protocol";
 import { SOCKET_STATUS } from "@/app/simulations/graph-game/_lib/socket/constants";
+import { LOCAL_ACTION } from "@/app/simulations/graph-game/_components/GraphGame/constants";
+import { JOIN_ERROR_TEXT } from "./joinErrors";
 
 export default function NewGame(){
   const state = useGameState();
-  const { send } = useGameActions();
+  const { send, dispatch } = useGameActions();
   const { status } = useSocket();
   const disconnected = status !== SOCKET_STATUS.OPEN;
   const [inputCode, setInputCode] = useState('');
@@ -16,6 +18,8 @@ export default function NewGame(){
   };
 
   const joinRoom = () => {
+    // Drop the previous attempt's error so a stale message doesn't show while this one is pending.
+    dispatch({ type: LOCAL_ACTION.CLEAR_JOIN_ERROR });
     send({
       type: CLIENT_MSG.JOIN_GAME,
       roomId: inputCode,
@@ -39,8 +43,8 @@ export default function NewGame(){
       onKeyDown={(e) => e.key === "Enter" && joinRoom()}
       />
       
-      {state.connection.invalidRoom && 
-      <p className="text-red-500">Invalid room</p>
+      {state.connection.joinError &&
+      <p className="text-red-500">{JOIN_ERROR_TEXT[state.connection.joinError]}</p>
       }
     </div>
     
