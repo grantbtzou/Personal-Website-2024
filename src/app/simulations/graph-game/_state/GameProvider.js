@@ -22,7 +22,8 @@ const MatchStateContext = createContext(null);
 const ChatStateContext = createContext(null);
 const GameActionsContext = createContext(null);
 
-const GAME_PATH = "/simulations/graph-game/game";
+const LOBBY_PATH = "/simulations/graph-game";
+const GAME_PATH = `${LOBBY_PATH}/game`;
 const RECONNECT_KEY = "reconnect";
 
 // The server's reconnect token is tied to one room, so the room is stored next to it.
@@ -72,7 +73,19 @@ export function GameProvider({ children }) {
       }
     }
 
+    if (msg.type === SERVER_MSG.ROOM_CLOSED) {
+      // The server has deleted the room and its reconnect tokens.
+      saveReconnect(null);
+      setTargetRoom(null);
+      joinedOnRef.current = null;
+      handshakeRef.current = null;
+    }
+
     dispatch({ type: msg.type, payload: msg });
+
+    if (msg.type === SERVER_MSG.ROOM_CLOSED) {
+      router.push(LOBBY_PATH);
+    }
 
     if (
       (msg.type === SERVER_MSG.GAME_CREATED || msg.type === SERVER_MSG.SUCCESSFUL_CONNECTION) &&

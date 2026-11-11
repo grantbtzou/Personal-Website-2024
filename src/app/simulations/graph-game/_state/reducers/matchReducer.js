@@ -26,7 +26,7 @@ export function matchReducer(state, action){
       return { 
         ...state, 
         gameStatus: GAME_STATUS.COMPLETE,
-        log: [...(state.log.slice(0,-1) ?? []), action.payload.log],
+        log: [...(state.log.slice(0,-1)), action.payload.log],
         winner: action.payload.winner,
       }
     case SERVER_MSG.GAME_STATE_UPDATE: {
