@@ -42,9 +42,11 @@ function useNewKeys(turn, keys) {
 // icon grows with it.
 export default function NodeFill({ nodeId, owner }) {
   const match = useMatchState();
-  const selections = match.log[match.viewingTurn - 1].selections;
+  // There is no turn to show while state is being reset, e.g. when the room closes and the board
+  // is still on screen until navigation to the lobby finishes. Treat that as nothing selected.
+  const selections = match.log[match.viewingTurn - 1]?.selections;
 
-  const picks = [PLAYER.ONE, PLAYER.TWO].flatMap((player) =>
+  const picks = !selections ? [] : [PLAYER.ONE, PLAYER.TWO].flatMap((player) =>
     [SELECTION.ATTACK, SELECTION.DEFEND]
       .filter((selection) => selections[player][selection] === nodeId)
       .map((selection) => ({ player, selection }))
