@@ -29,12 +29,15 @@ export function matchReducer(state, action){
         log: [...(state.log.slice(0,-1) ?? []), action.payload.log],
         winner: action.payload.winner,
       }
-    case SERVER_MSG.GAME_STATE_UPDATE:
+    case SERVER_MSG.GAME_STATE_UPDATE: {
+      const log = [...(state.log.slice(0,-1) ?? []), action.payload.log, action.payload.nextTurn];
       return {
         ...state,
-        log: [...(state.log.slice(0,-1) ?? []), action.payload.log, action.payload.nextTurn],
-        viewingTurn: state.viewingTurn+1,
+        log,
+        // Jump to the new turn, even if the player was reviewing an older one.
+        viewingTurn: log.length,
       };
+    }
     case LOCAL_ACTION.SET_VIEWING_TURN:
       return{
         ...state,
