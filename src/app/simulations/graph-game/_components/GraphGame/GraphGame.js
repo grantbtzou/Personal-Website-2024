@@ -22,9 +22,6 @@ export default function GraphGame( { roomId }){
   const { send } = useGameActions();
 
   const isReplaying = match.log.length > 0 && match.viewingTurn !== match.log.length;
-  console.log("is replaying: ", isReplaying);
-  console.log("rendering game with log length", match.log.length, "and viewing turn", match.viewingTurn)
-  console.log("current log: ", match.log);
   const playerSelection = match.playerSelection;
 
   const onNodesChange = useCallback(
