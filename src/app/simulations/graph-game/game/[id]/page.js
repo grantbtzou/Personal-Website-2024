@@ -5,6 +5,7 @@ import GraphGame from "@/app/simulations/graph-game/_components/GraphGame/GraphG
 import { JOIN_ERROR_TEXT } from "@/app/simulations/graph-game/_components/joinErrors";
 import { useGameActions, useGameState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { LOCAL_ACTION } from "@/app/simulations/graph-game/_components/GraphGame/constants";
+import { SERVER_MSG } from "@/app/simulations/graph-game/_lib/protocol";
 
 const LOBBY_PATH = "/simulations/graph-game";
 
@@ -27,6 +28,8 @@ export default function Page({ params }){
     return (
       <div className="mx-auto w-96 my-24 flex flex-col gap-2">
         <p className="text-red-500">{JOIN_ERROR_TEXT[connection.joinError]}: {id}</p>
+        {connection.joinError === SERVER_MSG.SESSION_TAKEN_OVER &&
+          <button className="border-2 w-fit px-2" onClick={() => joinRoom(id)}>Play here</button>}
         <Link className="border-2 w-fit px-2" href={LOBBY_PATH}>Back to lobby</Link>
       </div>
     );

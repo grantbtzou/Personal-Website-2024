@@ -4,4 +4,5 @@ import { SERVER_MSG } from "@/app/simulations/graph-game/_lib/protocol";
 export const JOIN_ERROR_TEXT = Object.freeze({
   [SERVER_MSG.INVALID_ROOM]: "Room not found",
   [SERVER_MSG.ROOM_FULL]: "Room is full",
+  [SERVER_MSG.SESSION_TAKEN_OVER]: "This game is open in another tab",
 });

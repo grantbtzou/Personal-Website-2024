@@ -21,6 +21,14 @@ export function connectionReducer(state, action) {
         ...state,
         joinError: action.type,
       };
+    // Another tab took over this player, so this tab is no longer in the room.
+    case SERVER_MSG.SESSION_TAKEN_OVER:
+      return {
+        ...state,
+        joinError: action.type,
+        connectedRoom: null,
+        playerId: null,
+      };
     case LOCAL_ACTION.CLEAR_JOIN_ERROR:
       return state.joinError === null ? state : { ...state, joinError: null };
     case SERVER_MSG.ERROR:

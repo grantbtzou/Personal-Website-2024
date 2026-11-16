@@ -73,6 +73,15 @@ export function GameProvider({ children }) {
       }
     }
 
+    if (msg.type === SERVER_MSG.SESSION_TAKEN_OVER) {
+      // Another tab is now playing as us. Stop targeting the room so this tab doesn't
+      // take the seat back when its socket reconnects. The reconnect token is kept, so
+      // the user can still take the seat back with "Play here" or a refresh.
+      setTargetRoom(null);
+      joinedOnRef.current = null;
+      handshakeRef.current = null;
+    }
+
     if (msg.type === SERVER_MSG.ROOM_CLOSED) {
       // The server has deleted the room and its reconnect tokens.
       saveReconnect(null);

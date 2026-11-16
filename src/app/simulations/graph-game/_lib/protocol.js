@@ -34,6 +34,7 @@ export const SERVER_MSG = Object.freeze({
   SELECTION_SET: "SELECTION_SET",
   CONFIRMATION_SET: "CONFIRMATION_SET",
   BOTH_CONFIRMED: "BOTH_CONFIRMED",
+  SESSION_TAKEN_OVER: "SESSION_TAKEN_OVER",
 });
 
 // Server messages that mean this client is now in a room.
