@@ -10,6 +10,23 @@ function formatEdgeChange(change) {
   return `${change.type === EDGE_CHANGE.CREATE ? "+" : "−"}${change.edgeId}`;
 }
 
+// Every line and column has a fixed size, so a turn's row is the same size whether its selections are
+// empty or filled in. Otherwise choosing a selection would resize the row and leave the highlight behind.
+const LINE_HEIGHT = "h-6 leading-6";
+const ICON_COLUMN = "w-4 shrink-0";
+// basis-0 splits the space evenly, whatever the text; long text is clipped rather than wrapped.
+const PLAYER_COLUMN = "flex-1 basis-0 min-w-0 text-center whitespace-nowrap overflow-hidden text-ellipsis";
+
+function LogLine({ icon, p1, p2, className = "" }) {
+  return (
+    <div className={`flex flex-row items-center ${LINE_HEIGHT}`}>
+      <div className={ICON_COLUMN}>{icon}</div>
+      <p className={`${PLAYER_COLUMN} ${className}`}>{p1}</p>
+      <p className={`${PLAYER_COLUMN} ${className}`}>{p2}</p>
+    </div>
+  );
+}
+
 function GameLog(){
   const match = useMatchState();
   const { dispatch } = useGameActions();
@@ -33,15 +50,14 @@ function GameLog(){
   };
 
   return (
-  <div className="border w-48 overflow-y-auto h-[500px]">
+  <div className="border w-48 shrink-0 overflow-y-auto h-[500px]">
     <h2>Game Log</h2>
     {/* Header row */}
     <div className="flex flex-row">
-      <div className="w-6" /> {/* spacer for turn number */}
-      <div className="flex flex-row flex-1">
-        <p className="w-1/2 text-center">P1</p>
-        <p className="w-1/2 text-center">P2</p>
-      </div>
+      <div className="w-6 shrink-0" /> {/* spacer for turn number */}
+      <div className={ICON_COLUMN} /> {/* spacer for the row icons */}
+      <p className={PLAYER_COLUMN}>P1</p>
+      <p className={PLAYER_COLUMN}>P2</p>
     </div>
 
     <div className="relative">
@@ -59,10 +75,7 @@ function GameLog(){
       />
     )}
     {match.log.map((logEntry, index) => {
-      const player1Attack = logEntry.selections.player1.attack;
-      const player2Attack = logEntry.selections.player2.attack;
-      const player1Defend = logEntry.selections.player1.defend;
-      const player2Defend = logEntry.selections.player2.defend;
+      const { player1, player2 } = logEntry.selections;
       const isViewing = match.viewingTurn === index + 1;
       return (
         <button
@@ -73,23 +86,16 @@ function GameLog(){
           onClick={() => handleTurnClick(index)}
         >
           <div className="flex flex-row">
-            <div className="w-6"><p>{logEntry.turnNumber}</p></div>
-            <div className="flex-1">
-              <div className="flex flex-row">
-                <div><Sword size={16} aria-label="Attack" /></div>
-                <p className="w-1/2 text-center">{player1Attack}</p>
-                <p className="w-1/2 text-center">{player2Attack}</p>
-              </div>
-              <div className="flex flex-row">
-                <div><Shield size={16} aria-label="Defend" /></div>
-                <p className="w-1/2 text-center">{player1Defend}</p>
-                <p className="w-1/2 text-center">{player2Defend}</p>
-              </div>
-              <div className="flex flex-row">
-                <div><Spline size={16} aria-label="Edge change" /></div>
-                <p className="w-1/2 text-center text-xs">{formatEdgeChange(logEntry.selections.player1.edgeChange)}</p>
-                <p className="w-1/2 text-center text-xs">{formatEdgeChange(logEntry.selections.player2.edgeChange)}</p>
-              </div>
+            <div className="w-6 shrink-0"><p className={LINE_HEIGHT}>{logEntry.turnNumber}</p></div>
+            <div className="flex-1 min-w-0">
+              <LogLine icon={<Sword size={16} aria-label="Attack" />} p1={player1.attack} p2={player2.attack} />
+              <LogLine icon={<Shield size={16} aria-label="Defend" />} p1={player1.defend} p2={player2.defend} />
+              <LogLine
+                icon={<Spline size={16} aria-label="Edge change" />}
+                p1={formatEdgeChange(player1.edgeChange)}
+                p2={formatEdgeChange(player2.edgeChange)}
+                className="text-xs"
+              />
             </div>
           </div>
         </button>
