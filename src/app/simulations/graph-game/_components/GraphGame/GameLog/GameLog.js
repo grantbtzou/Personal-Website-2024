@@ -1,7 +1,14 @@
 import { useGameActions, useMatchState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { LOCAL_ACTION } from "@/app/simulations/graph-game/_components/GraphGame/constants";
-import { Sword, Shield } from "lucide-react";
+import { Sword, Shield, Spline } from "lucide-react";
 import { useLayoutEffect, useRef, useState } from "react";
+import { EDGE_CHANGE } from "@/app/simulations/graph-game/_lib/protocol";
+
+// "+n1.1-n2.1" for a created edge, "−n1.1-n1.2" for a deleted one.
+function formatEdgeChange(change) {
+  if (!change) return null;
+  return `${change.type === EDGE_CHANGE.CREATE ? "+" : "−"}${change.edgeId}`;
+}
 
 function GameLog(){
   const match = useMatchState();
@@ -77,6 +84,11 @@ function GameLog(){
                 <div><Shield size={16} aria-label="Defend" /></div>
                 <p className="w-1/2 text-center">{player1Defend}</p>
                 <p className="w-1/2 text-center">{player2Defend}</p>
+              </div>
+              <div className="flex flex-row">
+                <div><Spline size={16} aria-label="Edge change" /></div>
+                <p className="w-1/2 text-center text-xs">{formatEdgeChange(logEntry.selections.player1.edgeChange)}</p>
+                <p className="w-1/2 text-center text-xs">{formatEdgeChange(logEntry.selections.player2.edgeChange)}</p>
               </div>
             </div>
           </div>

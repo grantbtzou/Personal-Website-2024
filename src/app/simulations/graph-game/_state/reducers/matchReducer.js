@@ -47,6 +47,7 @@ export function matchReducer(state, action){
     // The server sends its selections with the opponent's hidden until the turn resolves.
     case SERVER_MSG.ATTACK_CHANGE:
     case SERVER_MSG.DEFEND_CHANGE:
+    case SERVER_MSG.EDGE_CHANGE:
     case SERVER_MSG.SELECTION_UNDONE:
       return{
         ...state,

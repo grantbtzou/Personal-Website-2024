@@ -1,5 +1,6 @@
 import { Handle, Position } from '@xyflow/react';
 import NodeFill from './NodeFill';
+import SideHandles from './SideHandles';
 
 function LaneNode({ id, data = {} }) {
   return (
@@ -10,6 +11,7 @@ function LaneNode({ id, data = {} }) {
         position={Position.Top}
       />
       <NodeFill nodeId={id} owner={data.owner} />
+      <SideHandles file={data.coords?.file} />
       <Handle
         id = 'bot'
         type="source"

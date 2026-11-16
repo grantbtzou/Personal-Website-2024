@@ -1,6 +1,7 @@
 import { Handle, Position } from '@xyflow/react';
 import { PLAYER } from '@/app/simulations/graph-game/_lib/protocol';
 import NodeFill from './NodeFill';
+import SideHandles from './SideHandles';
 
 function BaseNode({ id, data = {} }) {
   return (
@@ -12,6 +13,7 @@ function BaseNode({ id, data = {} }) {
         position={Position.Top}
       />)}
        <NodeFill nodeId={id} owner={data.owner} />
+       <SideHandles file={data.coords?.file} />
         {data.baseOwner === PLAYER.ONE && (
         <Handle
         id = 'bot'
