@@ -1,6 +1,6 @@
 import { useGameActions, useGameState, useChatState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { useEffect, useRef, useState } from "react";
-import CopyButton from "./CopyButton";
+import { formatPlayerOrder } from "@/app/simulations/graph-game/_components/GraphGame/constants";
 import { CLIENT_MSG, USER_TYPE } from "@/app/simulations/graph-game/_lib/protocol";
 
 export default function Chat(){
@@ -27,19 +27,15 @@ export default function Chat(){
   };
   return(<div className="flex flex-col flex-1 min-h-0">
     {state.connection.connectedRoom && <div className="w-96 mx-auto flex flex-col flex-1 min-h-0">
-    <div className="flex gap-2">
-      <h1>Connected room: {state.connection.connectedRoom}</h1> 
-      <CopyButton text={state.connection.connectedRoom} />
-    </div>
-    
-
-    <h1>Player id: {state.connection.playerId}</h1>
     <ul ref={messagesRef} className="border-2 overflow-y-auto flex-1 min-h-0 break-words">
       {chat.messages.map((m, i) => {
         let label = "";
 
-        if (m.userType === USER_TYPE.PLAYER) label = `Player ${m.user}: `;
-        if (m.userType === USER_TYPE.SPECTATOR) label = `Spectator ${m.user}: `;
+        if (m.userType !== USER_TYPE.SYSTEM) {
+          const name = formatPlayerOrder(m.playerOrder) || m.user;
+          const you = m.user === state.connection.playerId ? " (you)" : "";
+          label = `${name}${you}: `;
+        }
 
         return (
           <li key={i} className={`flex items-baseline gap-2 px-2 ${m.userType === USER_TYPE.SYSTEM ? "system-message" : ""}`}>

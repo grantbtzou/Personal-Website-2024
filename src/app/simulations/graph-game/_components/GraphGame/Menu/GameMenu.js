@@ -1,7 +1,7 @@
 import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/GameProvider";
 import { useEffect } from "react";
 import { Sword, Shield, Undo2 } from "lucide-react";
-import { PLAYER_COLORS } from "@/app/simulations/graph-game/_components/GraphGame/constants";
+import { PLAYER_COLORS, formatPlayerOrder, isSpectatorOrder } from "@/app/simulations/graph-game/_components/GraphGame/constants";
 import { CLIENT_MSG, GAME_STATUS, PLAYER, SELECTION, DRAW } from "@/app/simulations/graph-game/_lib/protocol";
 
 function GameMenu(){
@@ -81,7 +81,9 @@ function GameMenu(){
   return(
   <div>
     <div className={`border p-4 ${playerOrder === PLAYER.ONE ? 'bg-red-500' : 'bg-blue-500'}`}>
-      <div className="text-white">{playerOrder}</div> 
+      <div className="text-white">
+        {playerOrder && (isSpectatorOrder(playerOrder) ? 'Spectating' : `You: ${formatPlayerOrder(playerOrder)}`)}
+      </div>
       {/* One highlight sits behind both buttons and slides between them, so switching between
           attack and defend moves the colour instead of swapping it. It covers the top half for
           attack and the bottom half for defend, using the same overshooting curve as the node fill. */}

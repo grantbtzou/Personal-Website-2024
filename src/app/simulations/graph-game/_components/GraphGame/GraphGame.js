@@ -8,6 +8,7 @@ import LabelNode from "./GameComponents/LabelNode";
 import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
+import RoomHeader from "./RoomHeader/RoomHeader";
 import { CLIENT_MSG, SELECTION } from "@/app/simulations/graph-game/_lib/protocol";
 
 const nodeTypes = {
@@ -70,7 +71,10 @@ export default function GraphGame( { roomId }){
   
   return(
   <div>
-    <div className="mx-auto mt-12 px-48 h-[500px] border-2 flex flex-1 flex-row" >
+    <div className="mt-12 px-48">
+      <RoomHeader/>
+    </div>
+    <div className="mx-auto mt-2 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <ReactFlow
         nodes={isReplaying ? match.log[match.viewingTurn-1].before.nodes : state.game.nodes}
         edges={isReplaying ? match.log[match.viewingTurn-1].before.edges : state.game.edges}
