@@ -42,14 +42,19 @@ export default function Chat(){
         if (m.userType === USER_TYPE.SPECTATOR) label = `Spectator ${m.user}: `;
 
         return (
-          <li key={i} className={m.userType === USER_TYPE.SYSTEM ? "system-message" : ""}>
-            {label && <strong>{label}</strong>}
-            {m.text}{" "}
-            {new Date(m.timestamp).toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true,
-            })}
+          <li key={i} className={`flex items-baseline gap-2 px-2 ${m.userType === USER_TYPE.SYSTEM ? "system-message" : ""}`}>
+            {/* min-w-0 lets long text wrap instead of pushing the timestamp out of the box. */}
+            <span className="flex-1 min-w-0">
+              {label && <strong>{label}</strong>}
+              {m.text}
+            </span>
+            <span className="shrink-0 whitespace-nowrap">
+              {new Date(m.timestamp).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })}
+            </span>
           </li>
         );
       })}
