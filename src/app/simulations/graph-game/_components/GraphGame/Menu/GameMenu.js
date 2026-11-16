@@ -60,32 +60,23 @@ function GameMenu(){
 
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Tab') {
+      if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (gameStatus !== GAME_STATUS.IN_PROGRESS || !playerOrder) return;
+      // Let text fields and controls keep their own Space and Enter behaviour.
+      if (e.target.closest('input, textarea, select, button, a, [contenteditable="true"]')) return;
+
+      if (e.key === ' ') {
         e.preventDefault();
-
-        if (gameStatus !== GAME_STATUS.IN_PROGRESS) return;
-
-        const next = playerSelection === SELECTION.ATTACK ? SELECTION.DEFEND : SELECTION.ATTACK;
-        setPlayerSelection(next);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameStatus, playerSelection]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
+        setPlayerSelection(playerSelection === SELECTION.ATTACK ? SELECTION.DEFEND : SELECTION.ATTACK);
+      } else if (e.key === 'Enter') {
         e.preventDefault();
-        if (gameStatus !== GAME_STATUS.IN_PROGRESS) return;
         selectConfirm();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameStatus, confirmation]);
+  }, [gameStatus, playerSelection, playerOrder]);
 
   return(
   <div>
