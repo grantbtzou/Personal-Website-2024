@@ -35,7 +35,10 @@ export function connectionReducer(state, action) {
       return {
         ...state,
         error: action.payload.message,
+        errorId: state.errorId + 1,
       };
+    case LOCAL_ACTION.CLEAR_ERROR:
+      return state.error === null ? state : { ...state, error: null };
     default:
       return state;
   }

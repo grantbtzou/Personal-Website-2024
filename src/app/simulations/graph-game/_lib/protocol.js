@@ -12,6 +12,7 @@ export const CLIENT_MSG = Object.freeze({
   SET_DEFEND: "SET_DEFEND",
   UNDO: "UNDO",
   SET_EDGE_CHANGE: "SET_EDGE_CHANGE",
+  CLEAR_EDGE_CHANGE: "CLEAR_EDGE_CHANGE",
 });
 
 // Messages the server sends. Each is dispatched to the reducers as-is.

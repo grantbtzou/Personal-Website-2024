@@ -9,6 +9,7 @@ import '@xyflow/react/dist/style.css';
 import GameMenu from "./Menu/GameMenu";
 import GameLog from "./GameLog/GameLog";
 import RoomHeader from "./RoomHeader/RoomHeader";
+import ErrorPopup from "./RoomHeader/ErrorPopup";
 import { CLIENT_MSG, EDGE_CHANGE, GAME_STATUS, SELECTION } from "@/app/simulations/graph-game/_lib/protocol";
 import { EDGE_HANDLE, canCreateEdge, canDeleteEdge, edgeEnds } from "@/app/simulations/graph-game/_lib/edges";
 import { isSpectatorOrder } from "./constants";
@@ -110,12 +111,19 @@ export default function GraphGame( { roomId }){
     sendEdgeChange(EDGE_CHANGE.CREATE, connection.source, connection.target);
   }, [canChangeEdges, sendEdgeChange]);
 
-  // Clicking an existing edge deletes it.
+  // This turn's own edge change, if any.
+  const ownEdgeChange = match.log[match.log.length - 1]?.selections?.[match.playerOrder]?.edgeChange;
+
+  // Clicking an existing edge deletes it. Clicking the edge you're creating or deleting this turn takes that back.
   const onEdgeClick = useCallback((_, edge) => {
-    if(!canChangeEdges || edge.data?.pending) return;
+    if(!canChangeEdges) return;
+    if(edge.data?.pending){
+      if(ownEdgeChange?.edgeId === edge.id) send({ type: CLIENT_MSG.CLEAR_EDGE_CHANGE });
+      return;
+    }
     if(!canDeleteEdge(edge, state.game.nodes, match.playerOrder)) return;
     sendEdgeChange(EDGE_CHANGE.DELETE, edge.source, edge.target);
-  }, [canChangeEdges, state.game.nodes, match.playerOrder, sendEdgeChange]);
+  }, [canChangeEdges, ownEdgeChange, state.game.nodes, match.playerOrder, send, sendEdgeChange]);
 
   const onNodeClick = useCallback((_, clickedNode) => {
     // The server rejects selection changes after confirming, so don't send them.
@@ -140,8 +148,9 @@ export default function GraphGame( { roomId }){
   
   return(
   <div>
-    <div className="mt-12 px-48">
+    <div className="mt-12 px-48 flex items-center gap-4 min-h-8">
       <RoomHeader/>
+      <ErrorPopup/>
     </div>
     <div className="mx-auto mt-2 px-48 h-[500px] border-2 flex flex-1 flex-row" >
       <div className="flex-1 min-w-0 h-full">
@@ -174,9 +183,6 @@ export default function GraphGame( { roomId }){
         <GameMenu/>
         <Chat/>
       </div>
-      {state.connection.error && (
-        <p className="text-red-500">Error:{state.connection.error}</p>
-      )}
     </div>
    
   </div>)

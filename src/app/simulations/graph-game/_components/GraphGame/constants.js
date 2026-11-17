@@ -15,6 +15,7 @@ export function isSpectatorOrder(playerOrder) {
 export const LOCAL_ACTION = Object.freeze({
   SET_VIEWING_TURN: 'SET_VIEWING_TURN',
   CLEAR_JOIN_ERROR: 'CLEAR_JOIN_ERROR',
+  CLEAR_ERROR: 'CLEAR_ERROR',
 });
 
 export const PLAYER_COLORS = {

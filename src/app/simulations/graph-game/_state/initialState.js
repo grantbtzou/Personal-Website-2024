@@ -6,6 +6,8 @@ export const initialGameState = {
     joinError: null,
     reconnectToken: null,
     error: null,
+    // Counts errors received, so the popup reappears even when the same message repeats.
+    errorId: 0,
   },
   match: {
     playerOrder: null,
