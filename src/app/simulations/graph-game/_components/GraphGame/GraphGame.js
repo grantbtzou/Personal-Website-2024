@@ -1,7 +1,7 @@
 import Chat from "./Chat/Chat"
-import { useCallback, useMemo } from "react"
+import { useCallback, useEffect, useMemo } from "react"
 import { useGameActions, useGameState, useMatchState } from "@/app/simulations/graph-game/_state/GameProvider";
-import { ReactFlow } from "@xyflow/react";
+import { ReactFlow, useNodesInitialized, useReactFlow, useStore } from "@xyflow/react";
 import LaneNode from "./GameComponents/LaneNode";
 import BaseNode from "./GameComponents/BaseNode";
 import LabelNode from "./GameComponents/LabelNode";
@@ -51,6 +51,26 @@ function withEdgeChanges(edges, nodes, selections) {
     });
   }
   return result;
+}
+
+/*
+Refits the board whenever its nodes finish measuring, the number of nodes changes, or the board
+is resized. ReactFlow's own fitView only runs once on mount, which on a reload happens before the
+nodes arrive from the server and before the panels beside the board have settled their widths.
+*/
+function AutoFitView({ nodeCount }) {
+  const { fitView } = useReactFlow();
+  const nodesInitialized = useNodesInitialized();
+  const width = useStore((s) => s.width);
+  const height = useStore((s) => s.height);
+
+  useEffect(() => {
+    if (nodesInitialized && nodeCount > 0 && width > 0 && height > 0) {
+      fitView();
+    }
+  }, [nodesInitialized, nodeCount, width, height, fitView]);
+
+  return null;
 }
 
 export default function GraphGame( { roomId }){
@@ -124,25 +144,29 @@ export default function GraphGame( { roomId }){
       <RoomHeader/>
     </div>
     <div className="mx-auto mt-2 px-48 h-[500px] border-2 flex flex-1 flex-row" >
-      <ReactFlow
-        nodes={nodes}
-        edges={displayEdges}
-        nodeTypes={nodeTypes}
-        onConnect={onConnect}
-        onNodeClick={onNodeClick}
-        onEdgeClick={onEdgeClick}
-        isValidConnection={isValidConnection}
-        nodesConnectable={canChangeEdges}
-        // Edges only change through the server, never with the Delete key.
-        deleteKeyCode={null}
-        connectionMode = 'Loose'
-        nodesDraggable={false}
-        panOnDrag={false}
-        zoomOnScroll={false}
-        zoomOnPinch={false}
-        zoomOnDoubleClick={false}
-        fitView
-      />
+      <div className="flex-1 min-w-0 h-full">
+        <ReactFlow
+          nodes={nodes}
+          edges={displayEdges}
+          nodeTypes={nodeTypes}
+          onConnect={onConnect}
+          onNodeClick={onNodeClick}
+          onEdgeClick={onEdgeClick}
+          isValidConnection={isValidConnection}
+          nodesConnectable={canChangeEdges}
+          // Edges only change through the server, never with the Delete key.
+          deleteKeyCode={null}
+          connectionMode = 'Loose'
+          nodesDraggable={false}
+          panOnDrag={false}
+          zoomOnScroll={false}
+          zoomOnPinch={false}
+          zoomOnDoubleClick={false}
+          fitView
+        >
+          <AutoFitView nodeCount={nodes.length} />
+        </ReactFlow>
+      </div>
       <div>
         <GameLog/>
       </div>

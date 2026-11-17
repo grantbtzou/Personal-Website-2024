@@ -62,21 +62,25 @@ function GameMenu(){
     const handleKeyDown = (e) => {
       if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
       if (gameStatus !== GAME_STATUS.IN_PROGRESS || !playerOrder) return;
-      // Let text fields and controls keep their own Space and Enter behaviour.
-      if (e.target.closest('input, textarea, select, button, a, [contenteditable="true"]')) return;
+      // Don't hijack letters typed into text fields, e.g. the chat box.
+      if (e.target.closest('input, textarea, select, [contenteditable="true"]')) return;
 
-      if (e.key === ' ') {
+      const key = e.key.toLowerCase();
+      if (key === 'w') {
         e.preventDefault();
         setPlayerSelection(playerSelection === SELECTION.ATTACK ? SELECTION.DEFEND : SELECTION.ATTACK);
-      } else if (e.key === 'Enter') {
+      } else if (key === 'e') {
         e.preventDefault();
         selectConfirm();
+      } else if (key === 'r') {
+        e.preventDefault();
+        selectUndo();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [gameStatus, playerSelection, playerOrder]);
+  }, [gameStatus, playerSelection, playerOrder, undoEnabled]);
 
   return(
   <div>
